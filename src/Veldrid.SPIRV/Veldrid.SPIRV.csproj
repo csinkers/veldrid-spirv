@@ -1,16 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NativeAssetsPath Condition="'$(NativeAssetsPath)' == ''">$(RepositoryRootDirectory)/build/</NativeAssetsPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
-    <PackageReference Include="Veldrid" Version="4.6.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.targets">
@@ -29,6 +24,10 @@
       <PackagePath>build/net40/Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
   <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths">
