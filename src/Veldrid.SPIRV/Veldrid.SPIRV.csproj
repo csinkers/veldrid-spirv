@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\veldrid\src\Veldrid\Veldrid.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
   <ItemGroup>
