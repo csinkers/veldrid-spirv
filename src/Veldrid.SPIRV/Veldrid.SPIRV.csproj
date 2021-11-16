@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NativeAssetsPath Condition="'$(NativeAssetsPath)' == ''">$(RepositoryRootDirectory)/build/</NativeAssetsPath>
@@ -24,10 +24,6 @@
       <PackagePath>build/net40/Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,6 +68,10 @@
       <Link>build/MonoAndroid10/native/armeabi-v7a/%(Filename)%(Extension)</Link>
       <Pack>true</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
