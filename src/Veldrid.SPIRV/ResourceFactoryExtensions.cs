@@ -173,7 +173,7 @@ namespace Veldrid.SPIRV
                 case GraphicsBackend.OpenGLES:
                     return Encoding.ASCII.GetBytes(code);
                 case GraphicsBackend.Metal:
-                    return Encoding.UTF8.GetBytes(code);
+                    return Util.UTF8.GetBytes(code);
                 default:
                     throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}");
             }
