@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Veldrid.SPIRV
 {
@@ -164,6 +165,7 @@ namespace Veldrid.SPIRV
             }
         }
 
+        [SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
         private static byte[] GetBytes(GraphicsBackend backend, string code)
         {
             switch (backend)
@@ -181,19 +183,14 @@ namespace Veldrid.SPIRV
 
         private static CrossCompileTarget GetCompilationTarget(GraphicsBackend backend)
         {
-            switch (backend)
+            return backend switch
             {
-                case GraphicsBackend.Direct3D11:
-                    return CrossCompileTarget.HLSL;
-                case GraphicsBackend.OpenGL:
-                    return CrossCompileTarget.GLSL;
-                case GraphicsBackend.Metal:
-                    return CrossCompileTarget.MSL;
-                case GraphicsBackend.OpenGLES:
-                    return CrossCompileTarget.ESSL;
-                default:
-                    throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}");
-            }
+                GraphicsBackend.Direct3D11 => CrossCompileTarget.HLSL,
+                GraphicsBackend.OpenGL => CrossCompileTarget.GLSL,
+                GraphicsBackend.Metal => CrossCompileTarget.MSL,
+                GraphicsBackend.OpenGLES => CrossCompileTarget.ESSL,
+                _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
+            };
         }
     }
 }

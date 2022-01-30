@@ -359,16 +359,16 @@ namespace Veldrid.SPIRV
 
         private static ShadercShaderKind GetShadercKind(ShaderStages stage)
         {
-            switch (stage)
+            return stage switch
             {
-                case ShaderStages.Vertex: return ShadercShaderKind.Vertex;
-                case ShaderStages.Geometry: return ShadercShaderKind.Geometry;
-                case ShaderStages.TessellationControl: return ShadercShaderKind.TessellationControl;
-                case ShaderStages.TessellationEvaluation: return ShadercShaderKind.TessellationEvaluation;
-                case ShaderStages.Fragment: return ShadercShaderKind.Fragment;
-                case ShaderStages.Compute: return ShadercShaderKind.Compute;
-                default: throw new SpirvCompilationException($"Invalid shader stage: {stage}");
-            }
+                ShaderStages.Vertex => ShadercShaderKind.Vertex,
+                ShaderStages.Geometry => ShadercShaderKind.Geometry,
+                ShaderStages.TessellationControl => ShadercShaderKind.TessellationControl,
+                ShaderStages.TessellationEvaluation => ShadercShaderKind.TessellationEvaluation,
+                ShaderStages.Fragment => ShadercShaderKind.Fragment,
+                ShaderStages.Compute => ShadercShaderKind.Compute,
+                _ => throw new SpirvCompilationException($"Invalid shader stage: {stage}"),
+            };
         }
     }
 }
