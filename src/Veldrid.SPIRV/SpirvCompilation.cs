@@ -145,7 +145,7 @@ namespace Veldrid.SPIRV
                         }
                     }
 
-                    SpirvReflection reflection = new SpirvReflection(
+                    SpirvReflection reflection = new(
                         vertexElements,
                         layouts);
 
@@ -248,7 +248,7 @@ namespace Veldrid.SPIRV
                         }
                     }
 
-                    SpirvReflection reflection = new SpirvReflection(
+                    SpirvReflection reflection = new(
                         Array.Empty<VertexElementDescription>(),
                         layouts);
 
