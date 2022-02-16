@@ -8,69 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.targets">
-      <PackagePath>build/Xamarin.iOS10/Veldrid.SPIRV.targets</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.dll.config">
-      <PackagePath>build/Xamarin.iOS10/Veldrid.SPIRV.dll.config</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="build\MonoAndroid10\Veldrid.SPIRV.targets">
-      <PackagePath>build/MonoAndroid10/Veldrid.SPIRV.targets</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="build\net40\Veldrid.SPIRV.targets">
-      <PackagePath>build/net40/Veldrid.SPIRV.targets</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="$(NativeAssetsPath)/win-x86/$(Configuration)/libveldrid-spirv.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes/win-x86/native/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/win-x64/$(Configuration)/libveldrid-spirv.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes/win-x64/native/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/linux-x64/$(Configuration)/libveldrid-spirv.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes/linux-x64/native/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/osx-x64/$(Configuration)/libveldrid-spirv.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes/osx-x64/native/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/ios/$(Configuration)/libveldrid-spirv-combined.a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>build/Xamarin.iOS10/native/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/android-arm64-v8a/$(Configuration)/libveldrid-spirv.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>build/MonoAndroid10/native/arm64-v8a/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-
-    <Content Include="$(NativeAssetsPath)/android-armeabi-v7a/$(Configuration)/libveldrid-spirv.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>build/MonoAndroid10/native/armeabi-v7a/%(Filename)%(Extension)</Link>
-      <Pack>true</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
