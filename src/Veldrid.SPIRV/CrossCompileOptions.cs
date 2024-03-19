@@ -7,6 +7,10 @@ namespace Veldrid.SPIRV
     /// </summary>
     public class CrossCompileOptions
     {
+        private static CrossCompileOptions? _default;
+
+        internal static CrossCompileOptions Default => _default ??= new();
+
         /// <summary>
         /// Indicates whether or not the compiled shader output should include a clip-space Z-range fixup at the end of the
         /// vertex shader.

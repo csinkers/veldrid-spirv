@@ -18,7 +18,7 @@ namespace Veldrid.SPIRV
         public static unsafe VertexFragmentCompilationResult CompileVertexFragment(
             byte[] vsBytes,
             byte[] fsBytes,
-            CrossCompileTarget target) => CompileVertexFragment(vsBytes, fsBytes, target, new CrossCompileOptions());
+            CrossCompileTarget target) => CompileVertexFragment(vsBytes, fsBytes, target, CrossCompileOptions.Default);
 
         /// <summary>
         /// Cross-compiles the given vertex-fragment pair into some target language.
@@ -169,7 +169,7 @@ namespace Veldrid.SPIRV
         /// <returns>A <see cref="ComputeCompilationResult"/> containing the compiled output.</returns>
         public static unsafe ComputeCompilationResult CompileCompute(
             byte[] csBytes,
-            CrossCompileTarget target) => CompileCompute(csBytes, target, new CrossCompileOptions());
+            CrossCompileTarget target) => CompileCompute(csBytes, target, CrossCompileOptions.Default);
 
         /// <summary>
         /// Cross-compiles the given vertex-fragment pair into some target language.

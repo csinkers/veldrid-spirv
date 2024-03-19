@@ -24,7 +24,7 @@ namespace Veldrid.SPIRV
             ShaderDescription vertexShaderDescription,
             ShaderDescription fragmentShaderDescription)
         {
-            return CreateFromSpirv(factory, vertexShaderDescription, fragmentShaderDescription, new CrossCompileOptions());
+            return CreateFromSpirv(factory, vertexShaderDescription, fragmentShaderDescription, CrossCompileOptions.Default);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Veldrid.SPIRV
             this ResourceFactory factory,
             ShaderDescription computeShaderDescription)
         {
-            return CreateFromSpirv(factory, computeShaderDescription, new CrossCompileOptions());
+            return CreateFromSpirv(factory, computeShaderDescription, CrossCompileOptions.Default);
         }
 
         /// <summary>
