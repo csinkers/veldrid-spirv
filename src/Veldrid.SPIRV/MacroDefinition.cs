@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Veldrid.SPIRV
 {
     /// <summary>
@@ -9,10 +11,11 @@ namespace Veldrid.SPIRV
         /// The name of the macro.
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// The macro's replacement value. May be null.
         /// </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// Constructs a new <see cref="MacroDefinition"/> with no value.
@@ -28,6 +31,7 @@ namespace Veldrid.SPIRV
         /// </summary>
         /// <param name="name">The name of the macro.</param>
         /// <param name="value">The macro's replacement value. May be null.</param>
+        [JsonConstructor]
         public MacroDefinition(string name, string value)
         {
             Name = name;
@@ -36,6 +40,8 @@ namespace Veldrid.SPIRV
 
         // For serialization
         internal MacroDefinition()
-        { }
+        {
+            Name = null!;
+        }
     }
 }

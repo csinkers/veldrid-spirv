@@ -305,7 +305,7 @@ namespace Veldrid.SPIRV
         internal static unsafe SpirvCompilationResult CompileGlslToSpirv(
             uint sourceLength,
             byte* sourceTextPtr,
-            string fileName,
+            string? fileName,
             ShaderStages stage,
             bool debug,
             uint macroCount,

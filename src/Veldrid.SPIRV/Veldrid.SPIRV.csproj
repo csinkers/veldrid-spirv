@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NativeAssetsPath Condition="'$(NativeAssetsPath)' == ''">$(RepositoryRootDirectory)/build/</NativeAssetsPath>
   </PropertyGroup>
@@ -31,9 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.4.255" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-
+    
   <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths">
     <ItemGroup>
       <_NativeAssetName Include="$(Configuration)/win-x86/libveldrid-spirv.dll" PackagePath="runtimes/win-x86/native" />

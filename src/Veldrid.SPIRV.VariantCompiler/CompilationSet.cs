@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Veldrid.SPIRV
 {
@@ -44,6 +44,18 @@ namespace Veldrid.SPIRV
 
     public class VariantCompiler
     {
+        internal static JsonSerializerOptions JsonOptions { get; }
+
+        static VariantCompiler()
+        {
+            JsonOptions = new JsonSerializerOptions
+            {
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            JsonOptions.Converters.Add(new JsonStringEnumConverter());
+        }
+
         private readonly List<string> _shaderSearchPaths = new();
         private readonly string _outputPath;
 
@@ -162,14 +174,9 @@ namespace Veldrid.SPIRV
                         writeReflectionFile = false;
                         string reflectionPath = Path.Combine(_outputPath, $"{variant.Name}_ReflectionInfo.json");
 
-                        JsonSerializer serializer = new();
-                        serializer.Formatting = Formatting.Indented;
-                        StringEnumConverter enumConverter = new();
-                        serializer.Converters.Add(enumConverter);
-                        using (StreamWriter sw = File.CreateText(reflectionPath))
-                        using (JsonTextWriter jtw = new(sw))
+                        using (Stream sw = File.Create(reflectionPath))
                         {
-                            serializer.Serialize(jtw, result.Reflection);
+                            JsonSerializer.Serialize(sw, result.Reflection, JsonOptions);
                         }
                         generatedFiles.Add(reflectionPath);
                     }
@@ -256,14 +263,9 @@ namespace Veldrid.SPIRV
 
                     string reflectionPath = Path.Combine(_outputPath, $"{variant.Name}_ReflectionInfo.json");
 
-                    JsonSerializer serializer = new();
-                    serializer.Formatting = Formatting.Indented;
-                    StringEnumConverter enumConverter = new();
-                    serializer.Converters.Add(enumConverter);
-                    using (StreamWriter sw = File.CreateText(reflectionPath))
-                    using (JsonTextWriter jtw = new(sw))
+                    using (Stream sw = File.Create(reflectionPath))
                     {
-                        serializer.Serialize(jtw, result.Reflection);
+                        JsonSerializer.Serialize(sw, result.Reflection, JsonOptions);
                     }
                     generatedFiles.Add(reflectionPath);
                 }

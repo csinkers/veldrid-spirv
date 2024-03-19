@@ -1,7 +1,6 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Veldrid.SPIRV
 {
@@ -12,8 +11,6 @@ namespace Veldrid.SPIRV
     /// </summary>
     public class SpirvReflection
     {
-        private static readonly Lazy<JsonSerializer> s_serializer = new(CreateSerializer);
-
         /// <summary>
         /// An array containing a description of each vertex element that is used by the compiled shader set.
         /// This array will be empty for compute shaders.
@@ -45,7 +42,7 @@ namespace Veldrid.SPIRV
         /// </summary>
         /// <param name="jsonPath">The path to the JSON file.</param>
         /// <returns>A new <see cref="SpirvReflection"/> object, deserialized from the file.</returns>
-        public static SpirvReflection LoadFromJson(string jsonPath)
+        public static SpirvReflection? LoadFromJson(string jsonPath)
         {
             using FileStream jsonStream = File.OpenRead(jsonPath);
             return LoadFromJson(jsonStream);
@@ -56,20 +53,18 @@ namespace Veldrid.SPIRV
         /// </summary>
         /// <param name="jsonStream">The stream of serialized JSON text.</param>
         /// <returns>A new <see cref="SpirvReflection"/> object, deserialized from the stream.</returns>
-        public static SpirvReflection LoadFromJson(Stream jsonStream)
+        public static SpirvReflection? LoadFromJson(Stream jsonStream)
         {
-            using StreamReader sr = new(jsonStream);
-            using JsonTextReader jtr = new(sr);
-            return s_serializer.Value.Deserialize<SpirvReflection>(jtr);
+            return JsonSerializer.Deserialize(jsonStream, SpirvReflectionJsonContext.Default.SpirvReflection);
         }
+    }
 
-        private static JsonSerializer CreateSerializer()
-        {
-            JsonSerializer serializer = new();
-            serializer.Formatting = Formatting.Indented;
-            StringEnumConverter enumConverter = new();
-            serializer.Converters.Add(enumConverter);
-            return serializer;
-        }
+    [JsonSourceGenerationOptions(
+        WriteIndented = true,
+        UseStringEnumConverter = true,
+        IncludeFields = true)]
+    [JsonSerializable(typeof(SpirvReflection))]
+    internal partial class SpirvReflectionJsonContext : JsonSerializerContext
+    {
     }
 }

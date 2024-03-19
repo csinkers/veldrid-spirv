@@ -1,9 +1,8 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace Veldrid.SPIRV
 {
@@ -31,14 +30,9 @@ namespace Veldrid.SPIRV
             }
 
             ShaderVariantDescription[] descs;
-            JsonSerializer serializer = new();
-            serializer.Formatting = Formatting.Indented;
-            StringEnumConverter enumConverter = new();
-            serializer.Converters.Add(enumConverter);
-            using (StreamReader sr = File.OpenText(SetDefinitionPath))
-            using (JsonTextReader jtr = new(sr))
+            using (Stream sr = File.OpenRead(SetDefinitionPath))
             {
-                descs = serializer.Deserialize<ShaderVariantDescription[]>(jtr);
+                descs = JsonSerializer.Deserialize<ShaderVariantDescription[]>(sr, VariantCompiler.JsonOptions);
             }
 
             HashSet<string> generatedPaths = new();
