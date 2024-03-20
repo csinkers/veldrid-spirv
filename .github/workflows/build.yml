@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+
 jobs:
   native_builds:
     runs-on: ${{ matrix.os }}
@@ -46,7 +47,7 @@ jobs:
     name: ${{ matrix.build_target }} Native Build
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Get Submodules
         run: git submodule update --init --recursive
@@ -70,7 +71,7 @@ jobs:
         shell: bash
 
       - name: Upload ${{ matrix.build_target }} Native Library
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.build_target }}
           path: ${{ matrix.artifact_name }}
@@ -81,62 +82,62 @@ jobs:
     needs: native_builds
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Download win-x64
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: win-x64
           path: build/Release
 
       - name: Download win-x86
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: win-x86
           path: build/Release
 
       - name: Download android-arm64-v8a
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: android-arm64-v8a
           path: build/Release
 
       - name: Download android-x86_64
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: android-x86_64
           path: build/Release
 
       - name: Download android-armeabi-v7a
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: android-armeabi-v7a
           path: build/Release
 
       - name: Download linux-x64
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: linux-x64
           path: build/Release
 
       - name: Download osx-universal
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: osx-universal
           path: build/Release
 
       - name: Download ios
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: ios
           path: build/Release
 
       - name: Install .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
 
       - name: Restore dependencies
         run: dotnet restore src
@@ -151,7 +152,7 @@ jobs:
         run: dotnet pack src/Veldrid.SPIRV -c Release --no-restore --no-build
 
       - name: Upload NuGet package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: nuget_package
           path: bin\Packages\Release\*.nupkg
