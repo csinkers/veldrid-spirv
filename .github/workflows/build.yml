@@ -18,6 +18,11 @@ jobs:
             artifact_name: build\Release\win-x64\libveldrid-spirv.dll
 
           - os: windows-latest
+            build_args: release win-arm64
+            build_target: win-arm64
+            artifact_name: build\Release\win-arm64\libveldrid-spirv.dll
+
+          - os: windows-latest
             build_args: Release win-x86
             build_target: win-x86
             artifact_name: build\Release\win-x86\libveldrid-spirv.dll
@@ -41,6 +46,11 @@ jobs:
             build_args: release linux-x64
             build_target: linux-x64
             artifact_name: build/Release/linux-x64/libveldrid-spirv.so
+
+          - os: ubuntu-latest
+            build_args: release linux-arm64
+            build_target: linux-arm64
+            artifact_name: build/Release/linux-arm64/libveldrid-spirv.so
 
           - os: macos-latest
             build_args: release osx 'arm64;x86_64'

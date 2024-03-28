@@ -33,8 +33,12 @@ while :; do
         linux-x64)
             _OSDir=linux-x64
             ;;
+        linux-arm64)
+            _CMakeToolchain=-DCMAKE_TOOLCHAIN_FILE=$scriptPath/toolchains/aarch64-linux-gnu.toolchain.cmake
+            _OSDir=linux-arm64
+            ;;
         ios)
-            _CMakeToolchain=-DCMAKE_TOOLCHAIN_FILE=$scriptPath/ios/ios.toolchain.cmake
+            _CMakeToolchain=-DCMAKE_TOOLCHAIN_FILE=$scriptPath/toolchains/ios.toolchain.cmake
             _CMakePlatform=-DPLATFORM=OS64COMBINED
             _CMakeEnableBitcode=-DENABLE_BITCODE=0
             _CMakeBuildTarget=veldrid-spirv-combined_genfile
