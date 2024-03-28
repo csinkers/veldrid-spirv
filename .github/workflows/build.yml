@@ -16,34 +16,42 @@ jobs:
             build_args: release win-x64
             build_target: win-x64
             artifact_name: build\Release\win-x64\libveldrid-spirv.dll
+
           - os: windows-latest
             build_args: Release win-x86
             build_target: win-x86
             artifact_name: build\Release\win-x86\libveldrid-spirv.dll
+
           - os: windows-latest
             build_args: release android arm64-v8a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-arm64-v8a
             artifact_name: build\Release\android-arm64-v8a\libveldrid-spirv.so
+
           - os: windows-latest
             build_args: release android x86_64 --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-x86_64
             artifact_name: build\Release\android-x86_64\libveldrid-spirv.so
+
           - os: windows-latest
             build_args: release android armeabi-v7a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-armeabi-v7a
             artifact_name: build\Release\android-armeabi-v7a\libveldrid-spirv.so
+
           - os: ubuntu-latest
             build_args: release linux-x64
             build_target: linux-x64
             artifact_name: build/Release/linux-x64/libveldrid-spirv.so
+
           - os: macos-latest
             build_args: release osx 'arm64;x86_64'
             build_target: osx
             artifact_name: build/Release/osx/libveldrid-spirv.dylib
+
           - os: macos-11
             build_args: release ios
             build_target: ios
             artifact_name: build/Release/ios/libveldrid-spirv-combined.a
+
     name: ${{ matrix.build_target }} Native Build
 
     steps:
@@ -74,9 +82,9 @@ jobs:
       # https://github.com/actions/setup-dotnet/issues/72
       - name: Install .NET
         if: ${{ matrix.build_target == 'win-x64' || matrix.build_target == 'osx' || matrix.build_target == 'linux-x64' }}
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
 
       - name: Restore Dependencies
         if: ${{ matrix.build_target == 'win-x64' || matrix.build_target == 'osx' || matrix.build_target == 'linux-x64' }}
