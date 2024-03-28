@@ -78,6 +78,14 @@ jobs:
                 ./ext/sync-shaderc.sh
               fi
         shell: bash
+        
+      - name: Get ARM64 toolchain
+        if: ${{ matrix.build_target == 'linux-arm64' }}
+        run: |
+             sudo apt-get update
+             sudo apt-get install gcc-aarch64-linux-gnu
+             sudo apt install g++-aarch64-linux-gnu
+        shell: bash
 
       - name: Build ${{ matrix.build_target }} Native Library
         run:  |
