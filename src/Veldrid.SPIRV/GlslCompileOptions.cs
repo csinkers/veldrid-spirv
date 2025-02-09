@@ -29,7 +29,7 @@ public class GlslCompileOptions
     /// </summary>
     public GlslCompileOptions()
     {
-        Macros = Array.Empty<MacroDefinition>();
+        Macros = [];
     }
 
     /// <summary>
@@ -43,6 +43,6 @@ public class GlslCompileOptions
     public GlslCompileOptions(bool debug, params MacroDefinition[] macros)
     {
         Debug = debug;
-        Macros = macros ?? Array.Empty<MacroDefinition>();
+        Macros = macros ?? [];
     }
 }

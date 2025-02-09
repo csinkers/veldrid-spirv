@@ -45,7 +45,7 @@ public class CrossCompileOptions
     /// </summary>
     public CrossCompileOptions()
     {
-        Specializations = Array.Empty<SpecializationConstant>();
+        Specializations = [];
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class CrossCompileOptions
     /// <param name="invertVertexOutputY">Indicates whether or not the compiled shader output should include a fixup at the
     /// end of the vertex shader which inverts the clip-space Y value.</param>
     public CrossCompileOptions(bool fixClipSpaceZ, bool invertVertexOutputY)
-        : this(fixClipSpaceZ, invertVertexOutputY, Array.Empty<SpecializationConstant>()) { }
+        : this(fixClipSpaceZ, invertVertexOutputY, []) { }
 
     /// <summary>
     /// Constructs a new <see cref="CrossCompileOptions"/>, used to control the parameters of shader translation.
@@ -76,7 +76,7 @@ public class CrossCompileOptions
             fixClipSpaceZ,
             invertVertexOutputY,
             normalizeResourceNames,
-            Array.Empty<SpecializationConstant>()
+            []
         ) { }
 
     /// <summary>

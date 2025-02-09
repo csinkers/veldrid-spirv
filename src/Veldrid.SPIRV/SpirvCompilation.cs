@@ -282,7 +282,7 @@ public static class SpirvCompilation
                 }
 
                 SpirvReflection reflection = new(
-                    Array.Empty<VertexElementDescription>(),
+                    [],
                     layouts
                 );
 
