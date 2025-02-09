@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
@@ -30,30 +30,25 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths">
+  <Target Name="DefineNativeAssets">
     <ItemGroup>
       <_NativeAssetName Include="$(Configuration)/win-x86/libveldrid-spirv.dll" PackagePath="runtimes/win-x86/native" />
       <_NativeAssetName Include="$(Configuration)/win-x64/libveldrid-spirv.dll" PackagePath="runtimes/win-x64/native" />
       <_NativeAssetName Include="$(Configuration)/win-arm64/libveldrid-spirv.dll" PackagePath="runtimes/win-arm64/native" />
-        
       <_NativeAssetName Include="$(Configuration)/linux-x64/libveldrid-spirv.so" PackagePath="runtimes/linux-x64/native" />
       <_NativeAssetName Include="$(Configuration)/linux-arm64/libveldrid-spirv.so" PackagePath="runtimes/linux-arm64/native" />
-        
       <_NativeAssetName Include="$(Configuration)/osx/libveldrid-spirv.dylib" PackagePath="runtimes/osx/native" />
-        
       <_NativeAssetName Include="$(Configuration)/ios/libveldrid-spirv-combined.a" PackagePath="build/Xamarin.iOS10/native" />
-        
       <_NativeAssetName Include="$(Configuration)/android-arm64-v8a/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/arm64-v8a" />
       <_NativeAssetName Include="$(Configuration)/android-armeabi-v7a/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/armeabi-v7a" />
       <_NativeAssetName Include="$(Configuration)/android-x86_64/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/x86_64" />
-
       <_ExistingAssets Include="@(_NativeAssetName)" Condition="Exists('$(NativeAssetsPath)%(Identity)')" />
+    </ItemGroup>
+  </Target>
 
-      <Content Include="@(_ExistingAssets->'$(NativeAssetsPath)%(Identity)')"
-               CopyToOutputDirectory="PreserveNewest"
-               PackagePath="%(PackagePath)"
-               Pack="true"
-               TargetPath="%(PackagePath)/%(Filename)%(Extension)"/>
+  <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths" DependsOnTargets="DefineNativeAssets">
+    <ItemGroup>
+      <Content Include="@(_ExistingAssets-&gt;'$(NativeAssetsPath)%(Identity)')" CopyToOutputDirectory="PreserveNewest" PackagePath="%(PackagePath)" TargetPath="%(PackagePath)/%(Filename)%(Extension)" Pack="true" />
     </ItemGroup>
   </Target>
 
@@ -61,5 +56,4 @@
     <Description>Veldrid integration for the SPIRV-Cross native library. Contains functionality to cross-compile SPIR-V bytecode into HLSL, GLSL, ESSL, and MSL shaders for use with Veldrid.</Description>
     <PackageTags>3D Graphics Direct3D DirectX Vulkan OpenGL Metal Core Standard Game</PackageTags>
   </PropertyGroup>
-
 </Project>
