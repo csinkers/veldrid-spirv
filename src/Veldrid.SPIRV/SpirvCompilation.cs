@@ -15,7 +15,7 @@ public static class SpirvCompilation
     /// <param name="fsBytes">The fragment shader's SPIR-V bytecode or ASCII-encoded GLSL source code.</param>
     /// <param name="target">The target language.</param>
     /// <returns>A <see cref="VertexFragmentCompilationResult"/> containing the compiled output.</returns>
-    public static unsafe VertexFragmentCompilationResult CompileVertexFragment(
+    public static VertexFragmentCompilationResult CompileVertexFragment(
         byte[] vsBytes,
         byte[] fsBytes,
         CrossCompileTarget target
@@ -36,8 +36,8 @@ public static class SpirvCompilation
         CrossCompileOptions options
     )
     {
-        int size1 = sizeof(CrossCompileInfo);
-        int size2 = sizeof(InteropArray);
+        // int size1 = sizeof(CrossCompileInfo);
+        // int size2 = sizeof(InteropArray);
 
         byte[] vsSpirvBytes;
         byte[] fsSpirvBytes;
@@ -103,10 +103,7 @@ public static class SpirvCompilation
         {
             info.VertexShader = new((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
             info.FragmentShader = new((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
-            info.Specializations = new(
-                (uint)specConstantsCount,
-                nativeSpecConstants
-            );
+            info.Specializations = new((uint)specConstantsCount, nativeSpecConstants);
 
             CompilationResult* result = null;
             try
@@ -116,7 +113,7 @@ public static class SpirvCompilation
                 {
                     throw new SpirvCompilationException(
                         "Compilation failed: "
-                        + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                            + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
                     );
                 }
 
@@ -185,7 +182,7 @@ public static class SpirvCompilation
     /// <param name="csBytes">The compute shader's SPIR-V bytecode or ASCII-encoded GLSL source code.</param>
     /// <param name="target">The target language.</param>
     /// <returns>A <see cref="ComputeCompilationResult"/> containing the compiled output.</returns>
-    public static unsafe ComputeCompilationResult CompileCompute(
+    public static ComputeCompilationResult CompileCompute(
         byte[] csBytes,
         CrossCompileTarget target
     ) => CompileCompute(csBytes, target, CrossCompileOptions.Default);
@@ -235,10 +232,7 @@ public static class SpirvCompilation
         fixed (SpecializationConstant* specConstants = options.Specializations)
         {
             info.ComputeShader = new((uint)csSpirvBytes.Length / 4, csBytesPtr);
-            info.Specializations = new(
-                (uint)options.Specializations.Length,
-                specConstants
-            );
+            info.Specializations = new((uint)options.Specializations.Length, specConstants);
 
             CompilationResult* result = null;
             try
@@ -248,7 +242,7 @@ public static class SpirvCompilation
                 {
                     throw new SpirvCompilationException(
                         "Compilation failed: "
-                        + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                            + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
                     );
                 }
 
@@ -281,10 +275,7 @@ public static class SpirvCompilation
                     }
                 }
 
-                SpirvReflection reflection = new(
-                    [],
-                    layouts
-                );
+                SpirvReflection reflection = new([], layouts);
 
                 return new(csCode, reflection);
             }
@@ -387,7 +378,7 @@ public static class SpirvCompilation
             {
                 throw new SpirvCompilationException(
                     "Compilation failed: "
-                    + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                        + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
                 );
             }
 

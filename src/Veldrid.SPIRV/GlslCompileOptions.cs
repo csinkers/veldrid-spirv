@@ -15,7 +15,7 @@ public class GlslCompileOptions
     /// An array of <see cref="MacroDefinition"/> which defines the set of preprocessor macros to define when compiling the
     /// GLSL source code.
     /// </summary>
-    public MacroDefinition[] Macros { get; set; }
+    public MacroDefinition[] Macros { get; set; } = [];
 
     /// <summary>
     /// Gets a default <see cref="GlslCompileOptions"/>.
@@ -25,10 +25,7 @@ public class GlslCompileOptions
     /// <summary>
     /// Constructs a new <see cref="GlslCompileOptions"/> with default properties.
     /// </summary>
-    public GlslCompileOptions()
-    {
-        Macros = [];
-    }
+    public GlslCompileOptions() { }
 
     /// <summary>
     /// Constructs a new <see cref="GlslCompileOptions"/>.
@@ -41,6 +38,6 @@ public class GlslCompileOptions
     public GlslCompileOptions(bool debug, params MacroDefinition[] macros)
     {
         Debug = debug;
-        Macros = macros ?? [];
+        Macros = macros;
     }
 }

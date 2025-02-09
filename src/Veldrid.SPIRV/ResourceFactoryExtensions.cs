@@ -66,13 +66,12 @@ public static class ResourceFactoryExtensions
         }
 
         CrossCompileTarget target = GetCompilationTarget(factory.BackendType);
-        VertexFragmentCompilationResult compilationResult =
-            SpirvCompilation.CompileVertexFragment(
-                vertexShaderDescription.ShaderBytes,
-                fragmentShaderDescription.ShaderBytes,
-                target,
-                options
-            );
+        VertexFragmentCompilationResult compilationResult = SpirvCompilation.CompileVertexFragment(
+            vertexShaderDescription.ShaderBytes,
+            fragmentShaderDescription.ShaderBytes,
+            target,
+            options
+        );
 
         string vertexEntryPoint =
             (backend == GraphicsBackend.Metal && vertexShaderDescription.EntryPoint == "main")
@@ -89,11 +88,7 @@ public static class ResourceFactoryExtensions
                 : fragmentShaderDescription.EntryPoint;
         byte[] fragmentBytes = GetBytes(backend, compilationResult.FragmentShader);
         Shader fragmentShader = factory.CreateShader(
-            new(
-                fragmentShaderDescription.Stage,
-                fragmentBytes,
-                fragmentEntryPoint
-            )
+            new(fragmentShaderDescription.Stage, fragmentBytes, fragmentEntryPoint)
         );
 
         return [vertexShader, fragmentShader];
@@ -152,11 +147,7 @@ public static class ResourceFactoryExtensions
         byte[] computeBytes = GetBytes(backend, compilationResult.ComputeShader);
 
         return factory.CreateShader(
-            new(
-                computeShaderDescription.Stage,
-                computeBytes,
-                computeEntryPoint
-            )
+            new(computeShaderDescription.Stage, computeBytes, computeEntryPoint)
         );
     }
 
@@ -187,7 +178,7 @@ public static class ResourceFactoryExtensions
             GraphicsBackend.Direct3D11 or GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES =>
                 Encoding.ASCII.GetBytes(code),
 
-            GraphicsBackend.Metal => Util.UTF8.GetBytes(code),
+            GraphicsBackend.Metal => Util.Utf8.GetBytes(code),
             _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
         };
 

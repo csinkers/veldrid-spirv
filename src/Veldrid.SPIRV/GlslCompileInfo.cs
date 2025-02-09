@@ -3,7 +3,7 @@
 namespace Veldrid.SPIRV;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-internal unsafe struct GlslCompileInfo
+internal struct GlslCompileInfo
 {
     /// <summary>
     /// Element type: byte
