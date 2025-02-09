@@ -10,7 +10,7 @@ namespace Veldrid.SPIRV.Tests
         public void SpirvReflection_DeserializeFromString()
         {
             const string SerializedJson =
-@"{
+                @"{
   ""VertexElements"": [],
   ""ResourceLayouts"": [
     {

@@ -13,13 +13,25 @@ namespace Veldrid.SPIRV
             CommandLineApplication.Execute<Program>(args);
         }
 
-        [Option("--search-path", "The set of directories to search for shader source files.", CommandOptionType.MultipleValue)]
+        [Option(
+            "--search-path",
+            "The set of directories to search for shader source files.",
+            CommandOptionType.MultipleValue
+        )]
         public string[] SearchPaths { get; }
 
-        [Option("--output-path", "The directory where compiled files are placed.", CommandOptionType.SingleValue)]
+        [Option(
+            "--output-path",
+            "The directory where compiled files are placed.",
+            CommandOptionType.SingleValue
+        )]
         public string OutputPath { get; }
 
-        [Option("--set", "The path to the JSON file containing shader variant definitions to compile.", CommandOptionType.SingleValue)]
+        [Option(
+            "--set",
+            "The path to the JSON file containing shader variant definitions to compile.",
+            CommandOptionType.SingleValue
+        )]
         public string SetDefinitionPath { get; }
 
         public void OnExecute()
@@ -32,7 +44,10 @@ namespace Veldrid.SPIRV
             ShaderVariantDescription[] descs;
             using (Stream sr = File.OpenRead(SetDefinitionPath))
             {
-                descs = JsonSerializer.Deserialize<ShaderVariantDescription[]>(sr, VariantCompiler.JsonOptions);
+                descs = JsonSerializer.Deserialize<ShaderVariantDescription[]>(
+                    sr,
+                    VariantCompiler.JsonOptions
+                );
             }
 
             HashSet<string> generatedPaths = new();

@@ -12,13 +12,17 @@ namespace Veldrid.SPIRV
 
         public uint GetLength(uint index)
         {
-            if (index >= DataBuffers.Count) { throw new ArgumentOutOfRangeException(nameof(index)); }
+            if (index >= DataBuffers.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
             return DataBuffers.Ref<InteropArray>(index).Count;
         }
 
         public void* GetData(uint index)
         {
-            if (index >= DataBuffers.Count) { throw new ArgumentOutOfRangeException(nameof(index)); }
+            if (index >= DataBuffers.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
             return DataBuffers.Ref<InteropArray>(index).Data;
         }
     }

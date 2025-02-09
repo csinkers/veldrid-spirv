@@ -18,7 +18,8 @@ namespace Veldrid.SPIRV
         public static unsafe VertexFragmentCompilationResult CompileVertexFragment(
             byte[] vsBytes,
             byte[] fsBytes,
-            CrossCompileTarget target) => CompileVertexFragment(vsBytes, fsBytes, target, CrossCompileOptions.Default);
+            CrossCompileTarget target
+        ) => CompileVertexFragment(vsBytes, fsBytes, target, CrossCompileOptions.Default);
 
         /// <summary>
         /// Cross-compiles the given vertex-fragment pair into some target language.
@@ -32,7 +33,8 @@ namespace Veldrid.SPIRV
             byte[] vsBytes,
             byte[] fsBytes,
             CrossCompileTarget target,
-            CrossCompileOptions options)
+            CrossCompileOptions options
+        )
         {
             int size1 = sizeof(CrossCompileInfo);
             int size2 = sizeof(InteropArray);
@@ -55,7 +57,8 @@ namespace Veldrid.SPIRV
                         ShaderStages.Vertex,
                         target == CrossCompileTarget.GLSL || target == CrossCompileTarget.ESSL,
                         0,
-                        null);
+                        null
+                    );
                     vsSpirvBytes = vsCompileResult.SpirvBytes;
                 }
             }
@@ -75,13 +78,15 @@ namespace Veldrid.SPIRV
                         ShaderStages.Fragment,
                         target == CrossCompileTarget.GLSL || target == CrossCompileTarget.ESSL,
                         0,
-                        null);
+                        null
+                    );
                     fsSpirvBytes = fsCompileResult.SpirvBytes;
                 }
             }
 
             int specConstantsCount = options.Specializations.Length;
-            NativeSpecializationConstant* nativeSpecConstants = stackalloc NativeSpecializationConstant[specConstantsCount];
+            NativeSpecializationConstant* nativeSpecConstants =
+                stackalloc NativeSpecializationConstant[specConstantsCount];
             for (int i = 0; i < specConstantsCount; i++)
             {
                 nativeSpecConstants[i].ID = options.Specializations[i].ID;
@@ -98,7 +103,10 @@ namespace Veldrid.SPIRV
             {
                 info.VertexShader = new InteropArray((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
                 info.FragmentShader = new InteropArray((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
-                info.Specializations = new InteropArray((uint)specConstantsCount, nativeSpecConstants);
+                info.Specializations = new InteropArray(
+                    (uint)specConstantsCount,
+                    nativeSpecConstants
+                );
 
                 CompilationResult* result = null;
                 try
@@ -107,7 +115,9 @@ namespace Veldrid.SPIRV
                     if (!result->Succeeded)
                     {
                         throw new SpirvCompilationException(
-                            "Compilation failed: " + Util.GetString((byte*)result->GetData(0), result->GetLength(0)));
+                            "Compilation failed: "
+                                + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                        );
                     }
 
                     string vsCode = Util.GetString((byte*)result->GetData(0), result->GetLength(0));
@@ -115,39 +125,47 @@ namespace Veldrid.SPIRV
 
                     ReflectionInfo* reflInfo = &result->ReflectionInfo;
 
-                    VertexElementDescription[] vertexElements = new VertexElementDescription[reflInfo->VertexElements.Count];
+                    VertexElementDescription[] vertexElements = new VertexElementDescription[
+                        reflInfo->VertexElements.Count
+                    ];
                     for (uint i = 0; i < reflInfo->VertexElements.Count; i++)
                     {
-                        ref NativeVertexElementDescription nativeDesc
-                            = ref reflInfo->VertexElements.Ref<NativeVertexElementDescription>(i);
+                        ref NativeVertexElementDescription nativeDesc =
+                            ref reflInfo->VertexElements.Ref<NativeVertexElementDescription>(i);
                         vertexElements[i] = new VertexElementDescription(
                             Util.GetString((byte*)nativeDesc.Name.Data, nativeDesc.Name.Count),
                             nativeDesc.Semantic,
                             nativeDesc.Format,
-                            nativeDesc.Offset);
+                            nativeDesc.Offset
+                        );
                     }
 
-                    ResourceLayoutDescription[] layouts = new ResourceLayoutDescription[reflInfo->ResourceLayouts.Count];
+                    ResourceLayoutDescription[] layouts = new ResourceLayoutDescription[
+                        reflInfo->ResourceLayouts.Count
+                    ];
                     for (uint i = 0; i < reflInfo->ResourceLayouts.Count; i++)
                     {
                         ref NativeResourceLayoutDescription nativeDesc =
                             ref reflInfo->ResourceLayouts.Ref<NativeResourceLayoutDescription>(i);
-                        layouts[i].Elements = new ResourceLayoutElementDescription[nativeDesc.ResourceElements.Count];
+                        layouts[i].Elements = new ResourceLayoutElementDescription[
+                            nativeDesc.ResourceElements.Count
+                        ];
                         for (uint j = 0; j < nativeDesc.ResourceElements.Count; j++)
                         {
                             ref NativeResourceElementDescription elemDesc =
-                                ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(j);
+                                ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(
+                                    j
+                                );
                             layouts[i].Elements[j] = new ResourceLayoutElementDescription(
                                 Util.GetString((byte*)elemDesc.Name.Data, elemDesc.Name.Count),
                                 elemDesc.Kind,
                                 elemDesc.Stages,
-                                elemDesc.Options);
+                                elemDesc.Options
+                            );
                         }
                     }
 
-                    SpirvReflection reflection = new(
-                        vertexElements,
-                        layouts);
+                    SpirvReflection reflection = new(vertexElements, layouts);
 
                     return new VertexFragmentCompilationResult(vsCode, fsCode, reflection);
                 }
@@ -169,7 +187,8 @@ namespace Veldrid.SPIRV
         /// <returns>A <see cref="ComputeCompilationResult"/> containing the compiled output.</returns>
         public static unsafe ComputeCompilationResult CompileCompute(
             byte[] csBytes,
-            CrossCompileTarget target) => CompileCompute(csBytes, target, CrossCompileOptions.Default);
+            CrossCompileTarget target
+        ) => CompileCompute(csBytes, target, CrossCompileOptions.Default);
 
         /// <summary>
         /// Cross-compiles the given vertex-fragment pair into some target language.
@@ -181,7 +200,8 @@ namespace Veldrid.SPIRV
         public static unsafe ComputeCompilationResult CompileCompute(
             byte[] csBytes,
             CrossCompileTarget target,
-            CrossCompileOptions options)
+            CrossCompileOptions options
+        )
         {
             byte[] csSpirvBytes;
 
@@ -200,7 +220,8 @@ namespace Veldrid.SPIRV
                         ShaderStages.Compute,
                         target == CrossCompileTarget.GLSL || target == CrossCompileTarget.ESSL,
                         0,
-                        null);
+                        null
+                    );
                     csSpirvBytes = vsCompileResult.SpirvBytes;
                 }
             }
@@ -214,7 +235,10 @@ namespace Veldrid.SPIRV
             fixed (SpecializationConstant* specConstants = options.Specializations)
             {
                 info.ComputeShader = new InteropArray((uint)csSpirvBytes.Length / 4, csBytesPtr);
-                info.Specializations = new InteropArray((uint)options.Specializations.Length, specConstants);
+                info.Specializations = new InteropArray(
+                    (uint)options.Specializations.Length,
+                    specConstants
+                );
 
                 CompilationResult* result = null;
                 try
@@ -223,34 +247,44 @@ namespace Veldrid.SPIRV
                     if (!result->Succeeded)
                     {
                         throw new SpirvCompilationException(
-                            "Compilation failed: " + Util.GetString((byte*)result->GetData(0), result->GetLength(0)));
+                            "Compilation failed: "
+                                + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                        );
                     }
 
                     string csCode = Util.GetString((byte*)result->GetData(0), result->GetLength(0));
 
                     ReflectionInfo* reflInfo = &result->ReflectionInfo;
 
-                    ResourceLayoutDescription[] layouts = new ResourceLayoutDescription[reflInfo->ResourceLayouts.Count];
+                    ResourceLayoutDescription[] layouts = new ResourceLayoutDescription[
+                        reflInfo->ResourceLayouts.Count
+                    ];
                     for (uint i = 0; i < reflInfo->ResourceLayouts.Count; i++)
                     {
                         ref NativeResourceLayoutDescription nativeDesc =
                             ref reflInfo->ResourceLayouts.Ref<NativeResourceLayoutDescription>(i);
-                        layouts[i].Elements = new ResourceLayoutElementDescription[nativeDesc.ResourceElements.Count];
+                        layouts[i].Elements = new ResourceLayoutElementDescription[
+                            nativeDesc.ResourceElements.Count
+                        ];
                         for (uint j = 0; j < nativeDesc.ResourceElements.Count; j++)
                         {
                             ref NativeResourceElementDescription elemDesc =
-                                ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(j);
+                                ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(
+                                    j
+                                );
                             layouts[i].Elements[j] = new ResourceLayoutElementDescription(
                                 Util.GetString((byte*)elemDesc.Name.Data, elemDesc.Name.Count),
                                 elemDesc.Kind,
                                 elemDesc.Stages,
-                                elemDesc.Options);
+                                elemDesc.Options
+                            );
                         }
                     }
 
                     SpirvReflection reflection = new(
                         Array.Empty<VertexElementDescription>(),
-                        layouts);
+                        layouts
+                    );
 
                     return new ComputeCompilationResult(csCode, reflection);
                 }
@@ -276,13 +310,19 @@ namespace Veldrid.SPIRV
             string sourceText,
             string fileName,
             ShaderStages stage,
-            GlslCompileOptions options)
+            GlslCompileOptions options
+        )
         {
             int sourceAsciiCount = Encoding.ASCII.GetByteCount(sourceText);
             byte* sourceAsciiPtr = stackalloc byte[sourceAsciiCount];
             fixed (char* sourceTextPtr = sourceText)
             {
-                Encoding.ASCII.GetBytes(sourceTextPtr, sourceText.Length, sourceAsciiPtr, sourceAsciiCount);
+                Encoding.ASCII.GetBytes(
+                    sourceTextPtr,
+                    sourceText.Length,
+                    sourceAsciiPtr,
+                    sourceAsciiCount
+                );
             }
 
             int macroCount = options.Macros.Length;
@@ -299,7 +339,8 @@ namespace Veldrid.SPIRV
                 stage,
                 options.Debug,
                 (uint)macroCount,
-                macros);
+                macros
+            );
         }
 
         internal static unsafe SpirvCompilationResult CompileGlslToSpirv(
@@ -309,7 +350,8 @@ namespace Veldrid.SPIRV
             ShaderStages stage,
             bool debug,
             uint macroCount,
-            NativeMacroDefinition* macros)
+            NativeMacroDefinition* macros
+        )
         {
             GlslCompileInfo info;
             info.Kind = GetShadercKind(stage);
@@ -317,14 +359,22 @@ namespace Veldrid.SPIRV
             info.Debug = debug;
             info.Macros = new InteropArray(macroCount, macros);
 
-            if (string.IsNullOrEmpty(fileName)) { fileName = "<veldrid-spirv-input>"; }
+            if (string.IsNullOrEmpty(fileName))
+            {
+                fileName = "<veldrid-spirv-input>";
+            }
             int fileNameAsciiCount = Encoding.ASCII.GetByteCount(fileName);
             byte* fileNameAsciiPtr = stackalloc byte[fileNameAsciiCount];
             if (fileNameAsciiCount > 0)
             {
                 fixed (char* fileNameTextPtr = fileName)
                 {
-                    Encoding.ASCII.GetBytes(fileNameTextPtr, fileName.Length, fileNameAsciiPtr, fileNameAsciiCount);
+                    Encoding.ASCII.GetBytes(
+                        fileNameTextPtr,
+                        fileName.Length,
+                        fileNameAsciiPtr,
+                        fileNameAsciiCount
+                    );
                 }
             }
             info.FileName = new InteropArray((uint)fileNameAsciiCount, fileNameAsciiPtr);
@@ -336,7 +386,9 @@ namespace Veldrid.SPIRV
                 if (!result->Succeeded)
                 {
                     throw new SpirvCompilationException(
-                        "Compilation failed: " + Util.GetString((byte*)result->GetData(0), result->GetLength(0)));
+                        "Compilation failed: "
+                            + Util.GetString((byte*)result->GetData(0), result->GetLength(0))
+                    );
                 }
 
                 uint length = result->GetLength(0);
@@ -357,7 +409,7 @@ namespace Veldrid.SPIRV
             }
         }
 
-        private static ShadercShaderKind GetShadercKind(ShaderStages stage)
+        static ShadercShaderKind GetShadercKind(ShaderStages stage)
         {
             return stage switch
             {

@@ -32,7 +32,8 @@ namespace Veldrid.SPIRV
             VariantStageDescription[] shaders,
             MacroDefinition[] macros,
             CrossCompileOptions crossCompileOptions,
-            CrossCompileTarget[] targets)
+            CrossCompileTarget[] targets
+        )
         {
             Name = name;
             Shaders = shaders;
@@ -48,11 +49,7 @@ namespace Veldrid.SPIRV
 
         static VariantCompiler()
         {
-            JsonOptions = new JsonSerializerOptions
-            {
-                IncludeFields = true,
-                WriteIndented = true
-            };
+            JsonOptions = new JsonSerializerOptions { IncludeFields = true, WriteIndented = true };
             JsonOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
@@ -69,8 +66,14 @@ namespace Veldrid.SPIRV
         {
             if (variant.Shaders.Length == 1)
             {
-                if (variant.Shaders[0].Stage == ShaderStages.Vertex) { return CompileVertexFragment(variant); }
-                if (variant.Shaders[0].Stage == ShaderStages.Compute) { return CompileCompute(variant); }
+                if (variant.Shaders[0].Stage == ShaderStages.Vertex)
+                {
+                    return CompileVertexFragment(variant);
+                }
+                if (variant.Shaders[0].Stage == ShaderStages.Compute)
+                {
+                    return CompileCompute(variant);
+                }
             }
             if (variant.Shaders.Length == 2)
             {
@@ -84,11 +87,15 @@ namespace Veldrid.SPIRV
 
                 if (!hasVertex)
                 {
-                    throw new SpirvCompilationException($"Variant \"{variant.Name}\" is missing a vertex shader.");
+                    throw new SpirvCompilationException(
+                        $"Variant \"{variant.Name}\" is missing a vertex shader."
+                    );
                 }
                 if (!hasFragment)
                 {
-                    throw new SpirvCompilationException($"Variant \"{variant.Name}\" is missing a fragment shader.");
+                    throw new SpirvCompilationException(
+                        $"Variant \"{variant.Name}\" is missing a fragment shader."
+                    );
                 }
 
                 return CompileVertexFragment(variant);
@@ -96,7 +103,8 @@ namespace Veldrid.SPIRV
             else
             {
                 throw new SpirvCompilationException(
-                    $"Variant \"{variant.Name}\" has an unsupported combination of shader stages.");
+                    $"Variant \"{variant.Name}\" has an unsupported combination of shader stages."
+                );
             }
         }
 
@@ -107,13 +115,18 @@ namespace Veldrid.SPIRV
             byte[] vsBytes = null;
             byte[] fsBytes = null;
 
-            string vertexFileName = variant.Shaders.FirstOrDefault(vsd => vsd.Stage == ShaderStages.Vertex)?.FileName;
+            string vertexFileName = variant
+                .Shaders.FirstOrDefault(vsd => vsd.Stage == ShaderStages.Vertex)
+                ?.FileName;
             if (vertexFileName != null)
             {
                 try
                 {
                     vsBytes = CompileToSpirv(variant, vertexFileName, ShaderStages.Vertex);
-                    string spvPath = Path.Combine(_outputPath, $"{variant.Name}_{ShaderStages.Vertex}.spv");
+                    string spvPath = Path.Combine(
+                        _outputPath,
+                        $"{variant.Name}_{ShaderStages.Vertex}.spv"
+                    );
                     File.WriteAllBytes(spvPath, vsBytes);
                     generatedFiles.Add(spvPath);
                 }
@@ -123,13 +136,18 @@ namespace Veldrid.SPIRV
                 }
             }
 
-            string fragmentFileName = variant.Shaders.FirstOrDefault(vsd => vsd.Stage == ShaderStages.Fragment)?.FileName;
+            string fragmentFileName = variant
+                .Shaders.FirstOrDefault(vsd => vsd.Stage == ShaderStages.Fragment)
+                ?.FileName;
             if (fragmentFileName != null)
             {
                 try
                 {
                     fsBytes = CompileToSpirv(variant, fragmentFileName, ShaderStages.Fragment);
-                    string spvPath = Path.Combine(_outputPath, $"{variant.Name}_{ShaderStages.Fragment}.spv");
+                    string spvPath = Path.Combine(
+                        _outputPath,
+                        $"{variant.Name}_{ShaderStages.Fragment}.spv"
+                    );
                     File.WriteAllBytes(spvPath, fsBytes);
                     generatedFiles.Add(spvPath);
                 }
@@ -143,7 +161,8 @@ namespace Veldrid.SPIRV
             {
                 throw new AggregateException(
                     $"Errors were encountered when compiling from GLSL to SPIR-V.",
-                    compilationExceptions);
+                    compilationExceptions
+                );
             }
 
             foreach (CrossCompileTarget target in variant.Targets)
@@ -155,16 +174,23 @@ namespace Veldrid.SPIRV
                         vsBytes,
                         fsBytes,
                         target,
-                        variant.CrossCompileOptions);
+                        variant.CrossCompileOptions
+                    );
                     if (result.VertexShader != null)
                     {
-                        string vsPath = Path.Combine(_outputPath, $"{variant.Name}_Vertex.{GetExtension(target)}");
+                        string vsPath = Path.Combine(
+                            _outputPath,
+                            $"{variant.Name}_Vertex.{GetExtension(target)}"
+                        );
                         File.WriteAllText(vsPath, result.VertexShader);
                         generatedFiles.Add(vsPath);
                     }
                     if (result.FragmentShader != null)
                     {
-                        string fsPath = Path.Combine(_outputPath, $"{variant.Name}_Fragment.{GetExtension(target)}");
+                        string fsPath = Path.Combine(
+                            _outputPath,
+                            $"{variant.Name}_Fragment.{GetExtension(target)}"
+                        );
                         File.WriteAllText(fsPath, result.FragmentShader);
                         generatedFiles.Add(fsPath);
                     }
@@ -172,7 +198,10 @@ namespace Veldrid.SPIRV
                     if (writeReflectionFile)
                     {
                         writeReflectionFile = false;
-                        string reflectionPath = Path.Combine(_outputPath, $"{variant.Name}_ReflectionInfo.json");
+                        string reflectionPath = Path.Combine(
+                            _outputPath,
+                            $"{variant.Name}_ReflectionInfo.json"
+                        );
 
                         using (Stream sw = File.Create(reflectionPath))
                         {
@@ -189,7 +218,10 @@ namespace Veldrid.SPIRV
 
             if (compilationExceptions.Count > 0)
             {
-                throw new AggregateException($"Errors were encountered when compiling shader variant(s).", compilationExceptions);
+                throw new AggregateException(
+                    $"Errors were encountered when compiling shader variant(s).",
+                    compilationExceptions
+                );
             }
 
             return generatedFiles.ToArray();
@@ -210,7 +242,8 @@ namespace Veldrid.SPIRV
         private byte[] CompileToSpirv(
             ShaderVariantDescription variant,
             string fileName,
-            ShaderStages stage)
+            ShaderStages stage
+        )
         {
             GlslCompileOptions glslOptions = GetOptions(variant);
             string glsl = LoadGlsl(fileName);
@@ -218,7 +251,8 @@ namespace Veldrid.SPIRV
                 glsl,
                 fileName,
                 stage,
-                glslOptions);
+                glslOptions
+            );
             return result.SpirvBytes;
         }
 
@@ -229,7 +263,10 @@ namespace Veldrid.SPIRV
 
         private string LoadGlsl(string fileName)
         {
-            if (fileName == null) { return null; }
+            if (fileName == null)
+            {
+                return null;
+            }
 
             foreach (string searchPath in _shaderSearchPaths)
             {
@@ -246,8 +283,15 @@ namespace Veldrid.SPIRV
         private string[] CompileCompute(ShaderVariantDescription variant)
         {
             List<string> generatedFiles = new();
-            byte[] csBytes = CompileToSpirv(variant, variant.Shaders[0].FileName, ShaderStages.Compute);
-            string spvPath = Path.Combine(_outputPath, $"{variant.Name}_{ShaderStages.Compute}.spv");
+            byte[] csBytes = CompileToSpirv(
+                variant,
+                variant.Shaders[0].FileName,
+                ShaderStages.Compute
+            );
+            string spvPath = Path.Combine(
+                _outputPath,
+                $"{variant.Name}_{ShaderStages.Compute}.spv"
+            );
             File.WriteAllBytes(spvPath, csBytes);
             generatedFiles.Add(spvPath);
 
@@ -256,12 +300,22 @@ namespace Veldrid.SPIRV
             {
                 try
                 {
-                    ComputeCompilationResult result = SpirvCompilation.CompileCompute(csBytes, target, variant.CrossCompileOptions);
-                    string csPath = Path.Combine(_outputPath, $"{variant.Name}_Compute.{GetExtension(target)}");
+                    ComputeCompilationResult result = SpirvCompilation.CompileCompute(
+                        csBytes,
+                        target,
+                        variant.CrossCompileOptions
+                    );
+                    string csPath = Path.Combine(
+                        _outputPath,
+                        $"{variant.Name}_Compute.{GetExtension(target)}"
+                    );
                     File.WriteAllText(csPath, result.ComputeShader);
                     generatedFiles.Add(csPath);
 
-                    string reflectionPath = Path.Combine(_outputPath, $"{variant.Name}_ReflectionInfo.json");
+                    string reflectionPath = Path.Combine(
+                        _outputPath,
+                        $"{variant.Name}_ReflectionInfo.json"
+                    );
 
                     using (Stream sw = File.Create(reflectionPath))
                     {
@@ -277,7 +331,10 @@ namespace Veldrid.SPIRV
 
             if (compilationExceptions.Count > 0)
             {
-                throw new AggregateException($"Errors were encountered when compiling shader variant(s).", compilationExceptions);
+                throw new AggregateException(
+                    $"Errors were encountered when compiling shader variant(s).",
+                    compilationExceptions
+                );
             }
 
             return generatedFiles.ToArray();

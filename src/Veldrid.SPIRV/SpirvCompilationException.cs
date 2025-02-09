@@ -10,25 +10,21 @@ namespace Veldrid.SPIRV
         /// <summary>
         /// Constructs a new <see cref="SpirvCompilationException"/>.
         /// </summary>
-        public SpirvCompilationException()
-        {
-        }
+        public SpirvCompilationException() { }
 
         /// <summary>
         /// Constructs a new <see cref="SpirvCompilationException"/> with the given message.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public SpirvCompilationException(string message) : base(message)
-        {
-        }
+        public SpirvCompilationException(string message)
+            : base(message) { }
 
         /// <summary>
         /// Constructs a new <see cref="SpirvCompilationException"/> with the given message and inner exception.
         /// </summary>
         /// <param name="message">The error message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public SpirvCompilationException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public SpirvCompilationException(string message, Exception innerException)
+            : base(message, innerException) { }
     }
 }

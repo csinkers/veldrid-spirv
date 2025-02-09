@@ -57,10 +57,26 @@ namespace Veldrid.SPIRV.Tests
         [InlineData("read-from-buffer.vert", "read-from-buffer.frag", CrossCompileTarget.GLSL)]
         [InlineData("read-from-buffer.vert", "read-from-buffer.frag", CrossCompileTarget.ESSL)]
         [InlineData("read-from-buffer.vert", "read-from-buffer.frag", CrossCompileTarget.MSL)]
-        [InlineData("read-from-buffer.vert.spv", "read-from-buffer.frag.spv", CrossCompileTarget.GLSL)]
-        [InlineData("read-from-buffer.vert.spv", "read-from-buffer.frag.spv", CrossCompileTarget.ESSL)]
-        [InlineData("read-from-buffer.vert.spv", "read-from-buffer.frag.spv", CrossCompileTarget.MSL)]
-        [InlineData("read-from-buffer.vert.spv", "read-from-buffer.frag.spv", CrossCompileTarget.HLSL)]
+        [InlineData(
+            "read-from-buffer.vert.spv",
+            "read-from-buffer.frag.spv",
+            CrossCompileTarget.GLSL
+        )]
+        [InlineData(
+            "read-from-buffer.vert.spv",
+            "read-from-buffer.frag.spv",
+            CrossCompileTarget.ESSL
+        )]
+        [InlineData(
+            "read-from-buffer.vert.spv",
+            "read-from-buffer.frag.spv",
+            CrossCompileTarget.MSL
+        )]
+        [InlineData(
+            "read-from-buffer.vert.spv",
+            "read-from-buffer.frag.spv",
+            CrossCompileTarget.HLSL
+        )]
         public void VertexFragmentSucceeds(string vs, string fs, CrossCompileTarget target)
         {
             byte[] vsBytes = TestUtil.LoadBytes(vs);
@@ -75,7 +91,8 @@ namespace Veldrid.SPIRV.Tests
                 vsBytes,
                 fsBytes,
                 target,
-                new CrossCompileOptions(false, false, specializations));
+                new CrossCompileOptions(false, false, specializations)
+            );
             Assert.NotNull(result.VertexShader);
             Assert.NotNull(result.FragmentShader);
         }
@@ -101,20 +118,39 @@ namespace Veldrid.SPIRV.Tests
         }
 
         [Theory]
-        [InlineData("overlapping-resources.vert.spv", "overlapping-resources.frag.spv", CrossCompileTarget.HLSL)]
-        [InlineData("overlapping-resources.vert", "overlapping-resources.frag.spv", CrossCompileTarget.HLSL)]
-        [InlineData("overlapping-resources.vert.spv", "overlapping-resources.frag", CrossCompileTarget.HLSL)]
-        [InlineData("overlapping-resources.vert", "overlapping-resources.frag", CrossCompileTarget.HLSL)]
+        [InlineData(
+            "overlapping-resources.vert.spv",
+            "overlapping-resources.frag.spv",
+            CrossCompileTarget.HLSL
+        )]
+        [InlineData(
+            "overlapping-resources.vert",
+            "overlapping-resources.frag.spv",
+            CrossCompileTarget.HLSL
+        )]
+        [InlineData(
+            "overlapping-resources.vert.spv",
+            "overlapping-resources.frag",
+            CrossCompileTarget.HLSL
+        )]
+        [InlineData(
+            "overlapping-resources.vert",
+            "overlapping-resources.frag",
+            CrossCompileTarget.HLSL
+        )]
         public void CompilationFails(string vs, string fs, CrossCompileTarget target)
         {
             byte[] vsBytes = TestUtil.LoadBytes(vs);
             byte[] fsBytes = TestUtil.LoadBytes(fs);
-            Assert.Throws<SpirvCompilationException>(() =>
-               SpirvCompilation.CompileVertexFragment(
-                   vsBytes,
-                   fsBytes,
-                   target,
-                   new CrossCompileOptions(false, false)));
+            Assert.Throws<SpirvCompilationException>(
+                () =>
+                    SpirvCompilation.CompileVertexFragment(
+                        vsBytes,
+                        fsBytes,
+                        target,
+                        new CrossCompileOptions(false, false)
+                    )
+            );
         }
 
         [Theory]
@@ -136,7 +172,9 @@ namespace Veldrid.SPIRV.Tests
                     false,
                     new MacroDefinition("Name0", "Value0"),
                     new MacroDefinition("Name1", "Value1"),
-                    new MacroDefinition("Name2")));
+                    new MacroDefinition("Name2")
+                )
+            );
 
             Assert.NotNull(result.SpirvBytes);
             Assert.True(result.SpirvBytes.Length > 4);

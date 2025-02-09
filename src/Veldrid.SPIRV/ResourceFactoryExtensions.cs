@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Text;
 
 namespace Veldrid.SPIRV
 {
@@ -22,9 +21,15 @@ namespace Veldrid.SPIRV
         public static Shader[] CreateFromSpirv(
             this ResourceFactory factory,
             ShaderDescription vertexShaderDescription,
-            ShaderDescription fragmentShaderDescription)
+            ShaderDescription fragmentShaderDescription
+        )
         {
-            return CreateFromSpirv(factory, vertexShaderDescription, fragmentShaderDescription, CrossCompileOptions.Default);
+            return CreateFromSpirv(
+                factory,
+                vertexShaderDescription,
+                fragmentShaderDescription,
+                CrossCompileOptions.Default
+            );
         }
 
         /// <summary>
@@ -44,7 +49,8 @@ namespace Veldrid.SPIRV
             this ResourceFactory factory,
             ShaderDescription vertexShaderDescription,
             ShaderDescription fragmentShaderDescription,
-            CrossCompileOptions options)
+            CrossCompileOptions options
+        )
         {
             GraphicsBackend backend = factory.BackendType;
             if (backend == GraphicsBackend.Vulkan)
@@ -52,39 +58,45 @@ namespace Veldrid.SPIRV
                 vertexShaderDescription.ShaderBytes = EnsureSpirv(vertexShaderDescription);
                 fragmentShaderDescription.ShaderBytes = EnsureSpirv(fragmentShaderDescription);
 
-                return new Shader[]
-                {
+                return
+                [
                     factory.CreateShader(vertexShaderDescription),
-                    factory.CreateShader(fragmentShaderDescription)
-                };
+                    factory.CreateShader(fragmentShaderDescription),
+                ];
             }
 
             CrossCompileTarget target = GetCompilationTarget(factory.BackendType);
-            VertexFragmentCompilationResult compilationResult = SpirvCompilation.CompileVertexFragment(
-                vertexShaderDescription.ShaderBytes,
-                fragmentShaderDescription.ShaderBytes,
-                target,
-                options);
+            VertexFragmentCompilationResult compilationResult =
+                SpirvCompilation.CompileVertexFragment(
+                    vertexShaderDescription.ShaderBytes,
+                    fragmentShaderDescription.ShaderBytes,
+                    target,
+                    options
+                );
 
-            string vertexEntryPoint = (backend == GraphicsBackend.Metal && vertexShaderDescription.EntryPoint == "main")
-                ? "main0"
-                : vertexShaderDescription.EntryPoint;
+            string vertexEntryPoint =
+                (backend == GraphicsBackend.Metal && vertexShaderDescription.EntryPoint == "main")
+                    ? "main0"
+                    : vertexShaderDescription.EntryPoint;
             byte[] vertexBytes = GetBytes(backend, compilationResult.VertexShader);
-            Shader vertexShader = factory.CreateShader(new ShaderDescription(
-                vertexShaderDescription.Stage,
-                vertexBytes,
-                vertexEntryPoint));
+            Shader vertexShader = factory.CreateShader(
+                new ShaderDescription(vertexShaderDescription.Stage, vertexBytes, vertexEntryPoint)
+            );
 
-            string fragmentEntryPoint = (backend == GraphicsBackend.Metal && fragmentShaderDescription.EntryPoint == "main")
-                ? "main0"
-                : fragmentShaderDescription.EntryPoint;
+            string fragmentEntryPoint =
+                (backend == GraphicsBackend.Metal && fragmentShaderDescription.EntryPoint == "main")
+                    ? "main0"
+                    : fragmentShaderDescription.EntryPoint;
             byte[] fragmentBytes = GetBytes(backend, compilationResult.FragmentShader);
-            Shader fragmentShader = factory.CreateShader(new ShaderDescription(
-                fragmentShaderDescription.Stage,
-                fragmentBytes,
-                fragmentEntryPoint));
+            Shader fragmentShader = factory.CreateShader(
+                new ShaderDescription(
+                    fragmentShaderDescription.Stage,
+                    fragmentBytes,
+                    fragmentEntryPoint
+                )
+            );
 
-            return new Shader[] { vertexShader, fragmentShader };
+            return [vertexShader, fragmentShader];
         }
 
         /// <summary>
@@ -98,10 +110,8 @@ namespace Veldrid.SPIRV
         /// <returns>The compiled compute <see cref="Shader"/>.</returns>
         public static Shader CreateFromSpirv(
             this ResourceFactory factory,
-            ShaderDescription computeShaderDescription)
-        {
-            return CreateFromSpirv(factory, computeShaderDescription, CrossCompileOptions.Default);
-        }
+            ShaderDescription computeShaderDescription
+        ) => CreateFromSpirv(factory, computeShaderDescription, CrossCompileOptions.Default);
 
         /// <summary>
         /// Creates a compute shader from the given <see cref="ShaderDescription"/> containing SPIR-V bytecode or GLSL source
@@ -117,7 +127,8 @@ namespace Veldrid.SPIRV
         public static Shader CreateFromSpirv(
             this ResourceFactory factory,
             ShaderDescription computeShaderDescription,
-            CrossCompileOptions options)
+            CrossCompileOptions options
+        )
         {
             GraphicsBackend backend = factory.BackendType;
             if (backend == GraphicsBackend.Vulkan)
@@ -130,60 +141,58 @@ namespace Veldrid.SPIRV
             ComputeCompilationResult compilationResult = SpirvCompilation.CompileCompute(
                 computeShaderDescription.ShaderBytes,
                 target,
-                options);
+                options
+            );
 
-            string computeEntryPoint = (backend == GraphicsBackend.Metal && computeShaderDescription.EntryPoint == "main")
-                ? "main0"
-                : computeShaderDescription.EntryPoint;
+            string computeEntryPoint =
+                (backend == GraphicsBackend.Metal && computeShaderDescription.EntryPoint == "main")
+                    ? "main0"
+                    : computeShaderDescription.EntryPoint;
+
             byte[] computeBytes = GetBytes(backend, compilationResult.ComputeShader);
-            return factory.CreateShader(new ShaderDescription(
-                computeShaderDescription.Stage,
-                computeBytes,
-                computeEntryPoint));
+
+            return factory.CreateShader(
+                new ShaderDescription(
+                    computeShaderDescription.Stage,
+                    computeBytes,
+                    computeEntryPoint
+                )
+            );
         }
 
-        private static unsafe byte[] EnsureSpirv(ShaderDescription description)
+        static unsafe byte[] EnsureSpirv(ShaderDescription description)
         {
             if (Util.HasSpirvHeader(description.ShaderBytes))
-            {
                 return description.ShaderBytes;
-            }
-            else
+
+            fixed (byte* sourceAsciiPtr = description.ShaderBytes)
             {
-                fixed (byte* sourceAsciiPtr = description.ShaderBytes)
-                {
-                    SpirvCompilationResult glslCompileResult = SpirvCompilation.CompileGlslToSpirv(
-                        (uint)description.ShaderBytes.Length,
-                        sourceAsciiPtr,
-                        null,
-                        description.Stage,
-                        description.Debug,
-                        0,
-                        null);
-                    return glslCompileResult.SpirvBytes;
-                }
+                SpirvCompilationResult glslCompileResult = SpirvCompilation.CompileGlslToSpirv(
+                    (uint)description.ShaderBytes.Length,
+                    sourceAsciiPtr,
+                    null,
+                    description.Stage,
+                    description.Debug,
+                    0,
+                    null
+                );
+
+                return glslCompileResult.SpirvBytes;
             }
         }
 
-        [SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
-        private static byte[] GetBytes(GraphicsBackend backend, string code)
-        {
-            switch (backend)
+        static byte[] GetBytes(GraphicsBackend backend, string code) =>
+            backend switch
             {
-                case GraphicsBackend.Direct3D11:
-                case GraphicsBackend.OpenGL:
-                case GraphicsBackend.OpenGLES:
-                    return Encoding.ASCII.GetBytes(code);
-                case GraphicsBackend.Metal:
-                    return Util.UTF8.GetBytes(code);
-                default:
-                    throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}");
-            }
-        }
+                GraphicsBackend.Direct3D11 or GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES =>
+                    Encoding.ASCII.GetBytes(code),
 
-        private static CrossCompileTarget GetCompilationTarget(GraphicsBackend backend)
-        {
-            return backend switch
+                GraphicsBackend.Metal => Util.UTF8.GetBytes(code),
+                _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
+            };
+
+        static CrossCompileTarget GetCompilationTarget(GraphicsBackend backend) =>
+            backend switch
             {
                 GraphicsBackend.Direct3D11 => CrossCompileTarget.HLSL,
                 GraphicsBackend.OpenGL => CrossCompileTarget.GLSL,
@@ -191,6 +200,5 @@ namespace Veldrid.SPIRV
                 GraphicsBackend.OpenGLES => CrossCompileTarget.ESSL,
                 _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
             };
-        }
     }
 }

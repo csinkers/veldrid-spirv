@@ -9,12 +9,14 @@ namespace Veldrid.SPIRV
         /// Element type: byte
         /// </summary>
         public InteropArray SourceText;
+
         /// <summary>
         /// Element type: byte
         /// </summary>
         public InteropArray FileName;
         public ShadercShaderKind Kind;
         public Bool32 Debug;
+
         /// <summary>
         /// Element type: NativeMacroDefinition
         /// </summary>

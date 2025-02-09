@@ -20,17 +20,14 @@
         /// </summary>
         public SpirvReflection? Reflection { get; }
 
-        internal VertexFragmentCompilationResult(
-            string vertexCode,
-            string fragmentCode)
-            : this(vertexCode, fragmentCode, null)
-        {
-        }
+        internal VertexFragmentCompilationResult(string vertexCode, string fragmentCode)
+            : this(vertexCode, fragmentCode, null) { }
 
         internal VertexFragmentCompilationResult(
             string vertexCode,
             string fragmentCode,
-            SpirvReflection? reflection)
+            SpirvReflection? reflection
+        )
         {
             VertexShader = vertexCode;
             FragmentShader = fragmentCode;

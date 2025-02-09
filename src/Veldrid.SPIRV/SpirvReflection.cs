@@ -31,7 +31,8 @@ namespace Veldrid.SPIRV
         /// compiled shader set.</param>
         public SpirvReflection(
             VertexElementDescription[] vertexElements,
-            ResourceLayoutDescription[] resourceLayouts)
+            ResourceLayoutDescription[] resourceLayouts
+        )
         {
             VertexElements = vertexElements;
             ResourceLayouts = resourceLayouts;
@@ -55,16 +56,18 @@ namespace Veldrid.SPIRV
         /// <returns>A new <see cref="SpirvReflection"/> object, deserialized from the stream.</returns>
         public static SpirvReflection? LoadFromJson(Stream jsonStream)
         {
-            return JsonSerializer.Deserialize(jsonStream, SpirvReflectionJsonContext.Default.SpirvReflection);
+            return JsonSerializer.Deserialize(
+                jsonStream,
+                SpirvReflectionJsonContext.Default.SpirvReflection
+            );
         }
     }
 
     [JsonSourceGenerationOptions(
         WriteIndented = true,
         UseStringEnumConverter = true,
-        IncludeFields = true)]
+        IncludeFields = true
+    )]
     [JsonSerializable(typeof(SpirvReflection))]
-    internal partial class SpirvReflectionJsonContext : JsonSerializerContext
-    {
-    }
+    internal partial class SpirvReflectionJsonContext : JsonSerializerContext { }
 }

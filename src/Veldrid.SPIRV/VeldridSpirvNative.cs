@@ -4,7 +4,7 @@ namespace Veldrid.SPIRV
 {
     internal static unsafe class VeldridSpirvNative
     {
-        private const string LibName = "libveldrid-spirv";
+        const string LibName = "libveldrid-spirv";
 
         [DllImport(LibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern CompilationResult* CrossCompile(CrossCompileInfo* info);

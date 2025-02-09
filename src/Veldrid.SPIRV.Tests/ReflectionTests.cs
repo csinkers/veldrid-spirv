@@ -5,7 +5,10 @@ namespace Veldrid.SPIRV.Tests
 {
     public class ReflectionTests
     {
-        private void AssertEqual(ResourceLayoutElementDescription a, ResourceLayoutElementDescription b)
+        private void AssertEqual(
+            ResourceLayoutElementDescription a,
+            ResourceLayoutElementDescription b
+        )
         {
             Assert.Equal(a.Name, b.Name);
             Assert.Equal(a.Kind, b.Kind);
@@ -16,9 +19,11 @@ namespace Veldrid.SPIRV.Tests
         [Theory]
         [MemberData(nameof(ShaderSetsAndResources))]
         public void ReflectionFromSpirv_Succeeds(
-            string vertex, string fragment,
+            string vertex,
+            string fragment,
             VertexElementDescription[] verts,
-            ResourceLayoutDescription[] layouts)
+            ResourceLayoutDescription[] layouts
+        )
         {
             byte[] vsBytes = TestUtil.LoadBytes(vertex);
             byte[] fsBytes = TestUtil.LoadBytes(fragment);
@@ -26,7 +31,8 @@ namespace Veldrid.SPIRV.Tests
                 vsBytes,
                 fsBytes,
                 CrossCompileTarget.HLSL,
-                new CrossCompileOptions(false, false, true));
+                new CrossCompileOptions(false, false, true)
+            );
 
             VertexElementDescription[] reflectedVerts = result.Reflection.VertexElements;
             Assert.Equal(verts.Length, reflectedVerts.Length);
@@ -57,24 +63,56 @@ namespace Veldrid.SPIRV.Tests
                 "planet.frag.spv",
                 new VertexElementDescription[]
                 {
-                    new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
-                    new VertexElementDescription("Normal", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
-                    new VertexElementDescription("TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
+                    new VertexElementDescription(
+                        "Position",
+                        VertexElementSemantic.TextureCoordinate,
+                        VertexElementFormat.Float3
+                    ),
+                    new VertexElementDescription(
+                        "Normal",
+                        VertexElementSemantic.TextureCoordinate,
+                        VertexElementFormat.Float3
+                    ),
+                    new VertexElementDescription(
+                        "TexCoord",
+                        VertexElementSemantic.TextureCoordinate,
+                        VertexElementFormat.Float2
+                    ),
                 },
                 new ResourceLayoutDescription[]
                 {
                     new ResourceLayoutDescription(
-                        new ResourceLayoutElementDescription("vdspv_0_0", ResourceKind.UniformBuffer, ShaderStages.Vertex | ShaderStages.Fragment),
+                        new ResourceLayoutElementDescription(
+                            "vdspv_0_0",
+                            ResourceKind.UniformBuffer,
+                            ShaderStages.Vertex | ShaderStages.Fragment
+                        ),
                         UnusedResource,
-                        new ResourceLayoutElementDescription("vdspv_0_2", ResourceKind.UniformBuffer, ShaderStages.Fragment)),
+                        new ResourceLayoutElementDescription(
+                            "vdspv_0_2",
+                            ResourceKind.UniformBuffer,
+                            ShaderStages.Fragment
+                        )
+                    ),
                     new ResourceLayoutDescription(
-                        new ResourceLayoutElementDescription("vdspv_1_0", ResourceKind.TextureReadOnly, ShaderStages.Fragment),
-                        new ResourceLayoutElementDescription("vdspv_1_1", ResourceKind.Sampler, ShaderStages.Fragment))
-                }
+                        new ResourceLayoutElementDescription(
+                            "vdspv_1_0",
+                            ResourceKind.TextureReadOnly,
+                            ShaderStages.Fragment
+                        ),
+                        new ResourceLayoutElementDescription(
+                            "vdspv_1_1",
+                            ResourceKind.Sampler,
+                            ShaderStages.Fragment
+                        )
+                    ),
+                },
             };
         }
 
-        private static readonly ResourceLayoutElementDescription UnusedResource
-            = new() { Options = (ResourceLayoutElementOptions)2 };
+        private static readonly ResourceLayoutElementDescription UnusedResource = new()
+        {
+            Options = (ResourceLayoutElementOptions)2,
+        };
     }
 }
