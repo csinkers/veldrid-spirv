@@ -1,65 +1,64 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Veldrid.SPIRV
+namespace Veldrid.SPIRV;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+internal unsafe struct NativeMacroDefinition
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal unsafe struct NativeMacroDefinition
+    public uint NameLength;
+    public fixed byte Name[128];
+    public uint ValueLength;
+    public fixed byte Value[128];
+
+    public NativeMacroDefinition(MacroDefinition macroDefinition)
     {
-        public uint NameLength;
-        public fixed byte Name[128];
-        public uint ValueLength;
-        public fixed byte Value[128];
+        if (string.IsNullOrEmpty(macroDefinition.Name))
+            throw new SpirvCompilationException("MacroDefinition Name must be non-null.");
 
-        public NativeMacroDefinition(MacroDefinition macroDefinition)
+        if (macroDefinition.Name.Length > 128)
         {
-            if (string.IsNullOrEmpty(macroDefinition.Name))
-                throw new SpirvCompilationException("MacroDefinition Name must be non-null.");
+            throw new SpirvCompilationException(
+                "Macro names must be less than or equal to 128 characters."
+            );
+        }
 
-            if (macroDefinition.Name.Length > 128)
+        fixed (char* nameU16Ptr = macroDefinition.Name)
+        fixed (byte* namePtr = Name)
+        {
+            int nameBytes = Encoding.ASCII.GetBytes(
+                nameU16Ptr,
+                macroDefinition.Name.Length,
+                namePtr,
+                128
+            );
+            NameLength = (uint)nameBytes;
+        }
+
+        if (!string.IsNullOrEmpty(macroDefinition.Value))
+        {
+            if (macroDefinition.Value.Length > 128)
             {
                 throw new SpirvCompilationException(
-                    "Macro names must be less than or equal to 128 characters."
+                    "Macro values must be less than or equal to 128 characters."
                 );
             }
 
-            fixed (char* nameU16Ptr = macroDefinition.Name)
-            fixed (byte* namePtr = Name)
+            fixed (char* valueU16 = macroDefinition.Value)
+            fixed (byte* valuePtr = Value)
             {
-                int nameBytes = Encoding.ASCII.GetBytes(
-                    nameU16Ptr,
-                    macroDefinition.Name.Length,
-                    namePtr,
+                int length = Encoding.ASCII.GetBytes(
+                    valueU16,
+                    macroDefinition.Value.Length,
+                    valuePtr,
                     128
                 );
-                NameLength = (uint)nameBytes;
+                ValueLength = (uint)length;
             }
-
-            if (!string.IsNullOrEmpty(macroDefinition.Value))
-            {
-                if (macroDefinition.Value.Length > 128)
-                {
-                    throw new SpirvCompilationException(
-                        "Macro values must be less than or equal to 128 characters."
-                    );
-                }
-
-                fixed (char* valueU16 = macroDefinition.Value)
-                fixed (byte* valuePtr = Value)
-                {
-                    int length = Encoding.ASCII.GetBytes(
-                        valueU16,
-                        macroDefinition.Value.Length,
-                        valuePtr,
-                        128
-                    );
-                    ValueLength = (uint)length;
-                }
-            }
-            else
-            {
-                ValueLength = 0;
-            }
+        }
+        else
+        {
+            ValueLength = 0;
         }
     }
 }
