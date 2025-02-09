@@ -20,7 +20,7 @@ public class GlslCompileOptions
     /// <summary>
     /// Gets a default <see cref="GlslCompileOptions"/>.
     /// </summary>
-    public static GlslCompileOptions Default { get; } = new GlslCompileOptions();
+    public static GlslCompileOptions Default { get; } = new();
 
     /// <summary>
     /// Constructs a new <see cref="GlslCompileOptions"/> with default properties.

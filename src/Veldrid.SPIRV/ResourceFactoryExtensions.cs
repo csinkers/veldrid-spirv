@@ -80,7 +80,7 @@ public static class ResourceFactoryExtensions
                 : vertexShaderDescription.EntryPoint;
         byte[] vertexBytes = GetBytes(backend, compilationResult.VertexShader);
         Shader vertexShader = factory.CreateShader(
-            new ShaderDescription(vertexShaderDescription.Stage, vertexBytes, vertexEntryPoint)
+            new(vertexShaderDescription.Stage, vertexBytes, vertexEntryPoint)
         );
 
         string fragmentEntryPoint =
@@ -89,7 +89,7 @@ public static class ResourceFactoryExtensions
                 : fragmentShaderDescription.EntryPoint;
         byte[] fragmentBytes = GetBytes(backend, compilationResult.FragmentShader);
         Shader fragmentShader = factory.CreateShader(
-            new ShaderDescription(
+            new(
                 fragmentShaderDescription.Stage,
                 fragmentBytes,
                 fragmentEntryPoint
@@ -152,7 +152,7 @@ public static class ResourceFactoryExtensions
         byte[] computeBytes = GetBytes(backend, compilationResult.ComputeShader);
 
         return factory.CreateShader(
-            new ShaderDescription(
+            new(
                 computeShaderDescription.Stage,
                 computeBytes,
                 computeEntryPoint

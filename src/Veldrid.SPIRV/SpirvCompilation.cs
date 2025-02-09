@@ -101,9 +101,9 @@ public static class SpirvCompilation
         fixed (byte* vsBytesPtr = vsSpirvBytes)
         fixed (byte* fsBytesPtr = fsSpirvBytes)
         {
-            info.VertexShader = new InteropArray((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
-            info.FragmentShader = new InteropArray((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
-            info.Specializations = new InteropArray(
+            info.VertexShader = new((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
+            info.FragmentShader = new((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
+            info.Specializations = new(
                 (uint)specConstantsCount,
                 nativeSpecConstants
             );
@@ -132,7 +132,7 @@ public static class SpirvCompilation
                 {
                     ref NativeVertexElementDescription nativeDesc =
                         ref reflInfo->VertexElements.Ref<NativeVertexElementDescription>(i);
-                    vertexElements[i] = new VertexElementDescription(
+                    vertexElements[i] = new(
                         Util.GetString((byte*)nativeDesc.Name.Data, nativeDesc.Name.Count),
                         nativeDesc.Semantic,
                         nativeDesc.Format,
@@ -156,7 +156,7 @@ public static class SpirvCompilation
                             ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(
                                 j
                             );
-                        layouts[i].Elements[j] = new ResourceLayoutElementDescription(
+                        layouts[i].Elements[j] = new(
                             Util.GetString((byte*)elemDesc.Name.Data, elemDesc.Name.Count),
                             elemDesc.Kind,
                             elemDesc.Stages,
@@ -167,7 +167,7 @@ public static class SpirvCompilation
 
                 SpirvReflection reflection = new(vertexElements, layouts);
 
-                return new VertexFragmentCompilationResult(vsCode, fsCode, reflection);
+                return new(vsCode, fsCode, reflection);
             }
             finally
             {
@@ -234,8 +234,8 @@ public static class SpirvCompilation
         fixed (byte* csBytesPtr = csSpirvBytes)
         fixed (SpecializationConstant* specConstants = options.Specializations)
         {
-            info.ComputeShader = new InteropArray((uint)csSpirvBytes.Length / 4, csBytesPtr);
-            info.Specializations = new InteropArray(
+            info.ComputeShader = new((uint)csSpirvBytes.Length / 4, csBytesPtr);
+            info.Specializations = new(
                 (uint)options.Specializations.Length,
                 specConstants
             );
@@ -272,7 +272,7 @@ public static class SpirvCompilation
                             ref nativeDesc.ResourceElements.Ref<NativeResourceElementDescription>(
                                 j
                             );
-                        layouts[i].Elements[j] = new ResourceLayoutElementDescription(
+                        layouts[i].Elements[j] = new(
                             Util.GetString((byte*)elemDesc.Name.Data, elemDesc.Name.Count),
                             elemDesc.Kind,
                             elemDesc.Stages,
@@ -286,7 +286,7 @@ public static class SpirvCompilation
                     layouts
                 );
 
-                return new ComputeCompilationResult(csCode, reflection);
+                return new(csCode, reflection);
             }
             finally
             {
@@ -329,7 +329,7 @@ public static class SpirvCompilation
         NativeMacroDefinition* macros = stackalloc NativeMacroDefinition[macroCount];
         for (int i = 0; i < macroCount; i++)
         {
-            macros[i] = new NativeMacroDefinition(options.Macros[i]);
+            macros[i] = new(options.Macros[i]);
         }
 
         return CompileGlslToSpirv(
@@ -355,9 +355,9 @@ public static class SpirvCompilation
     {
         GlslCompileInfo info;
         info.Kind = GetShadercKind(stage);
-        info.SourceText = new InteropArray(sourceLength, sourceTextPtr);
+        info.SourceText = new(sourceLength, sourceTextPtr);
         info.Debug = debug;
-        info.Macros = new InteropArray(macroCount, macros);
+        info.Macros = new(macroCount, macros);
 
         if (string.IsNullOrEmpty(fileName))
         {
@@ -377,7 +377,7 @@ public static class SpirvCompilation
                 );
             }
         }
-        info.FileName = new InteropArray((uint)fileNameAsciiCount, fileNameAsciiPtr);
+        info.FileName = new((uint)fileNameAsciiCount, fileNameAsciiPtr);
 
         CompilationResult* result = null;
         try
@@ -398,7 +398,7 @@ public static class SpirvCompilation
                 Buffer.MemoryCopy(result->GetData(0), spirvBytesPtr, length, length);
             }
 
-            return new SpirvCompilationResult(spirvBytes);
+            return new(spirvBytes);
         }
         finally
         {
