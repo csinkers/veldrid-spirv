@@ -5,16 +5,10 @@ using System.Runtime.InteropServices;
 namespace Veldrid.SPIRV;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-internal unsafe struct InteropArray
+internal unsafe struct InteropArray(uint count, void* data)
 {
-    public uint Count;
-    public void* Data;
-
-    public InteropArray(uint count, void* data)
-    {
-        Count = count;
-        Data = data;
-    }
+    public uint Count = count;
+    public void* Data = data;
 
     public ref T Ref<T>(int index)
     {

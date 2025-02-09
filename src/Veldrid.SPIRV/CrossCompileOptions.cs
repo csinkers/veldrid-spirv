@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Veldrid.SPIRV;
+﻿namespace Veldrid.SPIRV;
 
 /// <summary>
 /// An object used to control the parameters of shader translation from SPIR-V to some target language.
