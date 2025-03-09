@@ -85,8 +85,7 @@ public static class SpirvCompilation
         }
 
         int specConstantsCount = options.Specializations.Length;
-        NativeSpecializationConstant* nativeSpecConstants =
-            stackalloc NativeSpecializationConstant[specConstantsCount];
+        NativeSpecializationConstant* nativeSpecConstants = stackalloc NativeSpecializationConstant[specConstantsCount];
         for (int i = 0; i < specConstantsCount; i++)
         {
             nativeSpecConstants[i].ID = options.Specializations[i].ID;

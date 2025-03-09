@@ -10,7 +10,7 @@ public class CrossCompileOptions
     internal static CrossCompileOptions Default => _default ??= new();
 
     /// <summary>
-    /// Indicates whether or not the compiled shader output should include a clip-space Z-range fixup at the end of the
+    /// Indicates whether the compiled shader output should include a clip-space Z-range fixup at the end of the
     /// vertex shader.
     /// If true, then the shader will include code that assumes the clip space needs to be corrected from the
     /// "wrong" range into the "right" range for the particular type of shader. For example, if an OpenGL shader is being
@@ -21,7 +21,7 @@ public class CrossCompileOptions
     public bool FixClipSpaceZ { get; set; }
 
     /// <summary>
-    /// Indicates whether or not the compiled shader output should include a fixup at the end of the vertex shader which
+    /// Indicates whether the compiled shader output should include a fixup at the end of the vertex shader which
     /// inverts the clip-space Y value.
     /// </summary>
     public bool InvertVertexOutputY { get; set; }
@@ -49,9 +49,9 @@ public class CrossCompileOptions
     /// <summary>
     /// Constructs a new <see cref="CrossCompileOptions"/>, used to control the parameters of shader translation.
     /// </summary>
-    /// <param name="fixClipSpaceZ">Indicates whether or not the compiled shader output should include a clip-space Z-range
+    /// <param name="fixClipSpaceZ">Indicates whether the compiled shader output should include a clip-space Z-range
     /// fixup at the end of the vertex shader.</param>
-    /// <param name="invertVertexOutputY">Indicates whether or not the compiled shader output should include a fixup at the
+    /// <param name="invertVertexOutputY">Indicates whether the compiled shader output should include a fixup at the
     /// end of the vertex shader which inverts the clip-space Y value.</param>
     public CrossCompileOptions(bool fixClipSpaceZ, bool invertVertexOutputY)
         : this(fixClipSpaceZ, invertVertexOutputY, []) { }
@@ -59,9 +59,9 @@ public class CrossCompileOptions
     /// <summary>
     /// Constructs a new <see cref="CrossCompileOptions"/>, used to control the parameters of shader translation.
     /// </summary>
-    /// <param name="fixClipSpaceZ">Indicates whether or not the compiled shader output should include a clip-space Z-range
+    /// <param name="fixClipSpaceZ">Indicates whether the compiled shader output should include a clip-space Z-range
     /// fixup at the end of the vertex shader.</param>
-    /// <param name="invertVertexOutputY">Indicates whether or not the compiled shader output should include a fixup at the
+    /// <param name="invertVertexOutputY">Indicates whether the compiled shader output should include a fixup at the
     /// end of the vertex shader which inverts the clip-space Y value.</param>
     /// <param name="normalizeResourceNames">Indicates whether all resource names should be forced into a normalized form.
     /// This has functional impact on compilation targets where resource names are meaningful, like GLSL.</param>
@@ -80,9 +80,9 @@ public class CrossCompileOptions
     /// <summary>
     /// Constructs a new <see cref="CrossCompileOptions"/>, used to control the parameters of shader translation.
     /// </summary>
-    /// <param name="fixClipSpaceZ">Indicates whether or not the compiled shader output should include a clip-space Z-range
+    /// <param name="fixClipSpaceZ">Indicates whether the compiled shader output should include a clip-space Z-range
     /// fixup at the end of the vertex shader.</param>
-    /// <param name="invertVertexOutputY">Indicates whether or not the compiled shader output should include a fixup at the
+    /// <param name="invertVertexOutputY">Indicates whether the compiled shader output should include a fixup at the
     /// end of the vertex shader which inverts the clip-space Y value.</param>
     /// <param name="specializations">An array of <see cref="SpecializationConstant"/> which will be substituted into the
     /// shader as new constants.</param>
@@ -100,9 +100,9 @@ public class CrossCompileOptions
     /// <summary>
     /// Constructs a new <see cref="CrossCompileOptions"/>, used to control the parameters of shader translation.
     /// </summary>
-    /// <param name="fixClipSpaceZ">Indicates whether or not the compiled shader output should include a clip-space Z-range
+    /// <param name="fixClipSpaceZ">Indicates whether the compiled shader output should include a clip-space Z-range
     /// fixup at the end of the vertex shader.</param>
-    /// <param name="invertVertexOutputY">Indicates whether or not the compiled shader output should include a fixup at the
+    /// <param name="invertVertexOutputY">Indicates whether the compiled shader output should include a fixup at the
     /// end of the vertex shader which inverts the clip-space Y value.</param>
     /// <param name="normalizeResourceNames">Indicates whether all resource names should be forced into a normalized form.
     /// This has functional impact on compilation targets where resource names are meaningful, like GLSL.</param>
