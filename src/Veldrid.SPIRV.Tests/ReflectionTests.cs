@@ -34,6 +34,7 @@ namespace Veldrid.SPIRV.Tests
                 new CrossCompileOptions(false, false, true)
             );
 
+            Assert.NotNull(result.Reflection);
             VertexElementDescription[] reflectedVerts = result.Reflection.VertexElements;
             Assert.Equal(verts.Length, reflectedVerts.Length);
             for (int i = 0; i < verts.Length; i++)
