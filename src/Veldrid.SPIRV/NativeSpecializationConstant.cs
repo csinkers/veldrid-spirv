@@ -5,6 +5,6 @@ namespace Veldrid.SPIRV;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct NativeSpecializationConstant
 {
-    public uint ID;
+    public uint Id;
     public ulong Constant;
 }

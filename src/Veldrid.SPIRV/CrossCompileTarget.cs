@@ -5,6 +5,7 @@
 /// </summary>
 public enum CrossCompileTarget : uint
 {
+    // ReSharper disable InconsistentNaming
     /// <summary>
     /// HLSL Shader Model 5
     /// </summary>
@@ -24,4 +25,5 @@ public enum CrossCompileTarget : uint
     /// Metal Shading Language
     /// </summary>
     MSL,
+    // ReSharper restore InconsistentNaming
 };

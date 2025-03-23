@@ -5,14 +5,14 @@ namespace Veldrid.SPIRV;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct ReflectionInfo
 {
-    public InteropArray VertexElements; // InteropArray<NativeVertexElementDescription>
-    public InteropArray ResourceLayouts; // InteropArray<NativeResourceLayoutDescription>
+    public InteropArray<NativeVertexElementDescription> VertexElements;
+    public InteropArray<NativeResourceLayoutDescription> ResourceLayouts;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct NativeVertexElementDescription
 {
-    public InteropArray Name; // InteropArray<byte>
+    public InteropArray<byte> Name;
     public VertexElementSemantic Semantic;
     public VertexElementFormat Format;
     public uint Offset;
@@ -21,14 +21,15 @@ internal struct NativeVertexElementDescription
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct NativeResourceLayoutDescription
 {
-    public InteropArray ResourceElements; // InteropArray<NativeResourceElementDescription>
+    public InteropArray<NativeResourceElementDescription> ResourceElements;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct NativeResourceElementDescription
 {
-    public InteropArray Name; // InteropArray<byte>
+    public InteropArray<byte> Name;
     public ResourceKind Kind;
     public ShaderStages Stages;
     public ResourceLayoutElementOptions Options;
 }
+

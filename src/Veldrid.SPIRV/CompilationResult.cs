@@ -4,25 +4,16 @@ using System.Runtime.InteropServices;
 namespace Veldrid.SPIRV;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct CompilationResult
+internal struct CompilationResult
 {
     public Bool32 Succeeded;
-    public InteropArray DataBuffers;
+    public InteropArray<InteropArray<byte>> DataBuffers;
     public ReflectionInfo ReflectionInfo;
 
-    public uint GetLength(uint index)
+    public uint Count => DataBuffers.Count;
+    public ReadOnlySpan<byte> Data(int index)
     {
-        if (index >= DataBuffers.Count)
-            throw new ArgumentOutOfRangeException(nameof(index));
-
-        return DataBuffers.Ref<InteropArray>(index).Count;
-    }
-
-    public void* GetData(uint index)
-    {
-        if (index >= DataBuffers.Count)
-            throw new ArgumentOutOfRangeException(nameof(index));
-
-        return DataBuffers.Ref<InteropArray>(index).Data;
+        InteropArray<byte> buffer = DataBuffers.AsSpan()[index];
+        return buffer.AsSpan();
     }
 }

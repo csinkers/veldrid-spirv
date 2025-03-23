@@ -2,15 +2,15 @@
 using System.Text;
 using Xunit;
 
-namespace Veldrid.SPIRV.Tests
+namespace Veldrid.SPIRV.Tests;
+
+public class SerializationTests
 {
-    public class SerializationTests
+    [Fact]
+    public void SpirvReflection_DeserializeFromString()
     {
-        [Fact]
-        public void SpirvReflection_DeserializeFromString()
-        {
-            const string SerializedJson =
-                @"{
+        const string SerializedJson =
+            @"{
   ""VertexElements"": [],
   ""ResourceLayouts"": [
     {
@@ -41,14 +41,13 @@ namespace Veldrid.SPIRV.Tests
     }
   ]
 }";
-            byte[] bytes = Encoding.UTF8.GetBytes(SerializedJson);
-            using MemoryStream ms = new(bytes);
-            SpirvReflection? refl = SpirvReflection.LoadFromJson(ms);
-            Assert.NotNull(refl);
-            Assert.Empty(refl.VertexElements);
-            Assert.Equal(2, refl.ResourceLayouts.Length);
-            Assert.Equal(2, refl.ResourceLayouts[0].Elements.Length);
-            Assert.Single(refl.ResourceLayouts[1].Elements);
-        }
+        byte[] bytes = Encoding.UTF8.GetBytes(SerializedJson);
+        using MemoryStream ms = new(bytes);
+        SpirvReflection? refl = SpirvReflection.LoadFromJson(ms);
+        Assert.NotNull(refl);
+        Assert.Empty(refl.VertexElements);
+        Assert.Equal(2, refl.ResourceLayouts.Length);
+        Assert.Equal(2, refl.ResourceLayouts[0].Elements.Length);
+        Assert.Single(refl.ResourceLayouts[1].Elements);
     }
 }

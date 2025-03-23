@@ -9,8 +9,8 @@ internal struct CrossCompileInfo
     public Bool32 FixClipSpaceZ;
     public Bool32 InvertY;
     public Bool32 NormalizeResourceNames;
-    public InteropArray Specializations;
-    public InteropArray VertexShader;
-    public InteropArray FragmentShader;
-    public InteropArray ComputeShader;
+    public InteropArray<SpecializationConstant> Specializations;
+    public InteropArray<byte> VertexShader;
+    public InteropArray<byte> FragmentShader;
+    public InteropArray<byte> ComputeShader;
 }

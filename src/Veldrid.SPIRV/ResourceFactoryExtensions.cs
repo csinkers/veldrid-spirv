@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿#if false
+using System.Text;
 
 namespace Veldrid.SPIRV;
 
@@ -52,8 +53,8 @@ public static class ResourceFactoryExtensions
         CrossCompileOptions options
     )
     {
-        GraphicsBackend backend = factory.BackendType;
-        if (backend == GraphicsBackend.Vulkan)
+        CrossCompileTarget backend = factory.BackendType;
+        if (backend == CrossCompileTarget.Vulkan)
         {
             vertexShaderDescription.ShaderBytes = EnsureSpirv(vertexShaderDescription);
             fragmentShaderDescription.ShaderBytes = EnsureSpirv(fragmentShaderDescription);
@@ -74,18 +75,20 @@ public static class ResourceFactoryExtensions
         );
 
         string vertexEntryPoint =
-            (backend == GraphicsBackend.Metal && vertexShaderDescription.EntryPoint == "main")
+            backend == CrossCompileTarget.Metal && vertexShaderDescription.EntryPoint == "main"
                 ? "main0"
                 : vertexShaderDescription.EntryPoint;
+
         byte[] vertexBytes = GetBytes(backend, compilationResult.VertexShader);
         Shader vertexShader = factory.CreateShader(
             new(vertexShaderDescription.Stage, vertexBytes, vertexEntryPoint)
         );
 
         string fragmentEntryPoint =
-            (backend == GraphicsBackend.Metal && fragmentShaderDescription.EntryPoint == "main")
+            backend == CrossCompileTarget.Metal && fragmentShaderDescription.EntryPoint == "main"
                 ? "main0"
                 : fragmentShaderDescription.EntryPoint;
+
         byte[] fragmentBytes = GetBytes(backend, compilationResult.FragmentShader);
         Shader fragmentShader = factory.CreateShader(
             new(fragmentShaderDescription.Stage, fragmentBytes, fragmentEntryPoint)
@@ -125,8 +128,8 @@ public static class ResourceFactoryExtensions
         CrossCompileOptions options
     )
     {
-        GraphicsBackend backend = factory.BackendType;
-        if (backend == GraphicsBackend.Vulkan)
+        CrossCompileTarget backend = factory.BackendType;
+        if (backend == CrossCompileTarget.Vulkan)
         {
             computeShaderDescription.ShaderBytes = EnsureSpirv(computeShaderDescription);
             return factory.CreateShader(computeShaderDescription);
@@ -140,7 +143,7 @@ public static class ResourceFactoryExtensions
         );
 
         string computeEntryPoint =
-            (backend == GraphicsBackend.Metal && computeShaderDescription.EntryPoint == "main")
+            backend == CrossCompileTarget.Metal && computeShaderDescription.EntryPoint == "main"
                 ? "main0"
                 : computeShaderDescription.EntryPoint;
 
@@ -172,14 +175,14 @@ public static class ResourceFactoryExtensions
         }
     }
 
-    static byte[] GetBytes(GraphicsBackend backend, string code) =>
+    static byte[] GetBytes(CrossCompileTarget backend, string code) =>
         backend switch
         {
-            GraphicsBackend.Direct3D11 or GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES =>
+            CrossCompileTarget.Direct3D11 or CrossCompileTarget.OpenGL or CrossCompileTarget.OpenGLES =>
                 Encoding.ASCII.GetBytes(code),
 
-            GraphicsBackend.Metal => Util.Utf8.GetBytes(code),
-            _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
+            CrossCompileTarget.Metal => Util.Utf8.GetBytes(code),
+            _ => throw new SpirvCompilationException($"Invalid CrossCompileTarget: {backend}"),
         };
 
     static CrossCompileTarget GetCompilationTarget(GraphicsBackend backend) =>
@@ -192,3 +195,4 @@ public static class ResourceFactoryExtensions
             _ => throw new SpirvCompilationException($"Invalid GraphicsBackend: {backend}"),
         };
 }
+#endif

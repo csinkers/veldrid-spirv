@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Veldrid\Veldrid.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.targets">
       <PackagePath>build/Xamarin.iOS10/Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>

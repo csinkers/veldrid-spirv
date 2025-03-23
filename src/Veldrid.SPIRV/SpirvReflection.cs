@@ -6,8 +6,7 @@ namespace Veldrid.SPIRV;
 
 /// <summary>
 /// Contains information about the vertex attributes and resource types, and their binding slots, for a compiled
-/// set of shaders. This information can be used to construct <see cref="ResourceLayout"/> and
-/// <see cref="Pipeline"/> objects.
+/// set of shaders. This information can be used to construct ResourceLayout and Pipeline objects.
 /// </summary>
 public class SpirvReflection
 {
