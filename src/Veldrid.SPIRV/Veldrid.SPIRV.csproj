@@ -5,24 +5,24 @@
     <PackageTags>3D Graphics Direct3D DirectX Vulkan OpenGL Metal Core Standard Game</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
-    <Description>Veldrid integration for the SPIRV-Cross native library. Contains functionality to cross-compile SPIR-V bytecode into HLSL, GLSL, ESSL, and MSL shaders for use with Veldrid.</Description>
+    <Description>C# bindings for the SPIRV-Cross native library. Contains functionality to cross-compile SPIR-V bytecode into HLSL, GLSL, ESSL, and MSL shaders, primarily for use with Veldrid.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.targets">
-      <PackagePath>build/Xamarin.iOS10/Veldrid.SPIRV.targets</PackagePath>
+    <Content Include="build/Xamarin.iOS10/Sinkers.Veldrid.SPIRV.targets">
+      <PackagePath>build/Xamarin.iOS10/Sinkers.Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="build\Xamarin.iOS10\Veldrid.SPIRV.dll.config">
-      <PackagePath>build/Xamarin.iOS10/Veldrid.SPIRV.dll.config</PackagePath>
+    <Content Include="build/Xamarin.iOS10/Sinkers.Veldrid.SPIRV.dll.config">
+      <PackagePath>build/Xamarin.iOS10/Sinkers.Veldrid.SPIRV.dll.config</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="build\MonoAndroid10\Veldrid.SPIRV.targets">
-      <PackagePath>build/MonoAndroid10/Veldrid.SPIRV.targets</PackagePath>
+    <Content Include="build/MonoAndroid10/Sinkers.Veldrid.SPIRV.targets">
+      <PackagePath>build/MonoAndroid10/Sinkers.Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="build\net40\Veldrid.SPIRV.targets">
-      <PackagePath>build/net40/Veldrid.SPIRV.targets</PackagePath>
+    <Content Include="build/net40/Sinkers.Veldrid.SPIRV.targets">
+      <PackagePath>build/net40/Sinkers.Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
   </ItemGroup>

@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Veldrid.SPIRV;
 
 /// <summary>
@@ -8,3 +10,18 @@ public record struct VertexElementDescription(
     VertexElementSemantic Semantic,
     VertexElementFormat Format,
     uint Offset = 0);
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+internal struct NativeVertexElementDescription
+{
+    public InteropArray<byte> Name;
+    public VertexElementSemantic Semantic;
+    public VertexElementFormat Format;
+    public uint Offset;
+
+    public VertexElementDescription ToManaged() =>
+        new(Util.GetString(Name.AsSpan()),
+            Semantic,
+            Format,
+            Offset);
+}

@@ -17,11 +17,10 @@ internal unsafe struct NativeMacroDefinition
             throw new SpirvCompilationException("MacroDefinition Name must be non-null.");
 
         if (macroDefinition.Name.Length > 128)
-        {
-            throw new SpirvCompilationException(
-                "Macro names must be less than or equal to 128 characters."
-            );
-        }
+            throw new SpirvCompilationException("Macro names must be less than or equal to 128 characters.");
+
+        if (macroDefinition.Value.Length > 128)
+            throw new SpirvCompilationException("Macro values must be less than or equal to 128 characters.");
 
         fixed (char* nameU16Ptr = macroDefinition.Name)
         fixed (byte* namePtr = Name)
@@ -30,35 +29,27 @@ internal unsafe struct NativeMacroDefinition
                 nameU16Ptr,
                 macroDefinition.Name.Length,
                 namePtr,
-                128
-            );
+                128);
+
             NameLength = (uint)nameBytes;
         }
 
-        if (!string.IsNullOrEmpty(macroDefinition.Value))
-        {
-            if (macroDefinition.Value.Length > 128)
-            {
-                throw new SpirvCompilationException(
-                    "Macro values must be less than or equal to 128 characters."
-                );
-            }
-
-            fixed (char* valueU16 = macroDefinition.Value)
-            fixed (byte* valuePtr = Value)
-            {
-                int length = Encoding.ASCII.GetBytes(
-                    valueU16,
-                    macroDefinition.Value.Length,
-                    valuePtr,
-                    128
-                );
-                ValueLength = (uint)length;
-            }
-        }
-        else
+        if (string.IsNullOrEmpty(macroDefinition.Value))
         {
             ValueLength = 0;
+            return;
+        }
+
+        fixed (char* valueU16 = macroDefinition.Value)
+        fixed (byte* valuePtr = Value)
+        {
+            int length = Encoding.ASCII.GetBytes(
+                valueU16,
+                macroDefinition.Value.Length,
+                valuePtr,
+                128);
+
+            ValueLength = (uint)length;
         }
     }
 }

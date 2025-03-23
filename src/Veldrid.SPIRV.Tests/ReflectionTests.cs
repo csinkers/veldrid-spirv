@@ -50,9 +50,7 @@ public class ReflectionTests
             ResourceLayoutDescription reflectedLayout = reflectedLayouts[i];
             Assert.Equal(layout.Elements.Length, reflectedLayout.Elements.Length);
             for (int j = 0; j < layout.Elements.Length; j++)
-            {
                 AssertEqual(layout.Elements[j], reflectedLayout.Elements[j]);
-            }
         }
     }
 
@@ -84,6 +82,7 @@ public class ReflectionTests
 
     static readonly ResourceLayoutElementDescription UnusedResource = new()
     {
+        Name = "",
         Options = (ResourceLayoutElementOptions)2,
     };
 }
