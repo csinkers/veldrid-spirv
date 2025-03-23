@@ -9,7 +9,7 @@ public class SerializationTests
     [Fact]
     public void SpirvReflection_DeserializeFromString()
     {
-        const string SerializedJson =
+        const string serializedJson =
             @"{
   ""VertexElements"": [],
   ""ResourceLayouts"": [
@@ -41,9 +41,10 @@ public class SerializationTests
     }
   ]
 }";
-        byte[] bytes = Encoding.UTF8.GetBytes(SerializedJson);
+        byte[] bytes = Encoding.UTF8.GetBytes(serializedJson);
         using MemoryStream ms = new(bytes);
         SpirvReflection? refl = SpirvReflection.LoadFromJson(ms);
+
         Assert.NotNull(refl);
         Assert.Empty(refl.VertexElements);
         Assert.Equal(2, refl.ResourceLayouts.Length);

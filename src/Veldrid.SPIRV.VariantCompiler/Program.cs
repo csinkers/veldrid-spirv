@@ -24,6 +24,12 @@ public class Program
 
     public void OnExecute()
     {
+        if (SetDefinitionPath == null)
+            throw new InvalidOperationException("No definition path specified");
+
+        if (OutputPath == null)
+            throw new InvalidOperationException("No output path specified");
+
         if (!Directory.Exists(OutputPath))
             Directory.CreateDirectory(OutputPath);
 
