@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Veldrid.SPIRV.Tests;
 
-internal static class TestUtil
+internal static class TestSpirvUtil
 {
     public static string LoadShaderText(string name)
         => File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "TestShaders", name));

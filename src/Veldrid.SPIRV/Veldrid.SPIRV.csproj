@@ -1,8 +1,12 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>Sinkers.Veldrid.SPIRV</PackageId>
     <PackageTags>3D Graphics Direct3D DirectX Vulkan OpenGL Metal Core Standard Game</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/csinkers/veldrid-spirv</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <Description>C# bindings for the SPIRV-Cross native library. Contains functionality to cross-compile SPIR-V bytecode into HLSL, GLSL, ESSL, and MSL shaders, primarily for use with Veldrid.</Description>
@@ -21,36 +25,40 @@
       <PackagePath>build/MonoAndroid10/Sinkers.Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
+    <!--
     <Content Include="build/net40/Sinkers.Veldrid.SPIRV.targets">
       <PackagePath>build/net40/Sinkers.Veldrid.SPIRV.targets</PackagePath>
       <Pack>true</Pack>
     </Content>
+    -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Link="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <Target Name="DefineNativeAssets">
     <ItemGroup>
-      <_NativeAssetName Include="$(Configuration)/win-x86/libveldrid-spirv.dll"            PackagePath="runtimes/win-x86/native" />
-      <_NativeAssetName Include="$(Configuration)/win-x64/libveldrid-spirv.dll"            PackagePath="runtimes/win-x64/native" />
-      <_NativeAssetName Include="$(Configuration)/win-arm64/libveldrid-spirv.dll"          PackagePath="runtimes/win-arm64/native" />
-      <_NativeAssetName Include="$(Configuration)/linux-x64/libveldrid-spirv.so"           PackagePath="runtimes/linux-x64/native" />
-      <_NativeAssetName Include="$(Configuration)/linux-arm64/libveldrid-spirv.so"         PackagePath="runtimes/linux-arm64/native" />
-      <_NativeAssetName Include="$(Configuration)/osx/libveldrid-spirv.dylib"              PackagePath="runtimes/osx/native" />
-      <_NativeAssetName Include="$(Configuration)/ios/libveldrid-spirv-combined.a"         PackagePath="build/Xamarin.iOS10/native" />
-      <_NativeAssetName Include="$(Configuration)/android-arm64-v8a/libveldrid-spirv.so"   PackagePath="build/MonoAndroid10/native/arm64-v8a" />
+      <_NativeAssetName Include="$(Configuration)/win-x86/libveldrid-spirv.dll" PackagePath="runtimes/win-x86/native" />
+      <_NativeAssetName Include="$(Configuration)/win-x64/libveldrid-spirv.dll" PackagePath="runtimes/win-x64/native" />
+      <_NativeAssetName Include="$(Configuration)/win-arm64/libveldrid-spirv.dll" PackagePath="runtimes/win-arm64/native" />
+      <_NativeAssetName Include="$(Configuration)/linux-x64/libveldrid-spirv.so" PackagePath="runtimes/linux-x64/native" />
+      <_NativeAssetName Include="$(Configuration)/linux-arm64/libveldrid-spirv.so" PackagePath="runtimes/linux-arm64/native" />
+      <_NativeAssetName Include="$(Configuration)/osx/libveldrid-spirv.dylib" PackagePath="runtimes/osx/native" />
+      <_NativeAssetName Include="$(Configuration)/ios/libveldrid-spirv-combined.a" PackagePath="build/Xamarin.iOS10/native" />
+      <_NativeAssetName Include="$(Configuration)/android-arm64-v8a/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/arm64-v8a" />
       <_NativeAssetName Include="$(Configuration)/android-armeabi-v7a/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/armeabi-v7a" />
-      <_NativeAssetName Include="$(Configuration)/android-x86_64/libveldrid-spirv.so"      PackagePath="build/MonoAndroid10/native/x86_64" />
+      <_NativeAssetName Include="$(Configuration)/android-x86_64/libveldrid-spirv.so" PackagePath="build/MonoAndroid10/native/x86_64" />
       <_ExistingAssets Include="@(_NativeAssetName)" Condition="Exists('$(NativeAssetsPath)%(Identity)')" />
     </ItemGroup>
   </Target>
 
   <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths" DependsOnTargets="DefineNativeAssets">
     <ItemGroup>
-      <Content
-          Include="@(_ExistingAssets->'$(NativeAssetsPath)%(Identity)')"
-          CopyToOutputDirectory="PreserveNewest"
-          PackagePath="%(PackagePath)"
-          TargetPath="%(PackagePath)/%(Filename)%(Extension)"
-          Pack="true" />
+      <Content Include="@(_ExistingAssets->'$(NativeAssetsPath)%(Identity)')" CopyToOutputDirectory="PreserveNewest" PackagePath="%(PackagePath)" TargetPath="%(PackagePath)/%(Filename)%(Extension)" Pack="true" />
     </ItemGroup>
   </Target>
 

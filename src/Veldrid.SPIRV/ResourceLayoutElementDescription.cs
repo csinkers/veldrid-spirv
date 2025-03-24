@@ -20,7 +20,7 @@ internal struct NativeResourceElementDescription
     public ResourceLayoutElementOptions Options;
 
     public ResourceLayoutElementDescription ToManaged() =>
-        new(Util.GetString(Name.AsSpan()),
+        new(SpirvUtil.GetString(Name.AsSpan()),
             Kind,
             Stages,
             Options);

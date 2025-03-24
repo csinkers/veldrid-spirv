@@ -5,7 +5,10 @@
 /// </summary>
 public class CrossCompileOptions
 {
-    internal static CrossCompileOptions Default { get; } = new();
+    /// <summary>
+    /// The default set of options.
+    /// </summary>
+    public static CrossCompileOptions Default { get; } = new();
 
     /// <summary>
     /// Indicates whether the compiled shader output should include a clip-space Z-range fixup at the end of the

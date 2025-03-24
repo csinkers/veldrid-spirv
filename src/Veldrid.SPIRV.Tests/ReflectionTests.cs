@@ -25,8 +25,8 @@ public class ReflectionTests
         ResourceLayoutDescription[] layouts
     )
     {
-        byte[] vsBytes = TestUtil.LoadBytes(vertex);
-        byte[] fsBytes = TestUtil.LoadBytes(fragment);
+        byte[] vsBytes = TestSpirvUtil.LoadBytes(vertex);
+        byte[] fsBytes = TestSpirvUtil.LoadBytes(fragment);
         VertexFragmentCompilationResult result = SpirvCompilation.CompileVertexFragment(
             vsBytes,
             fsBytes,
@@ -35,7 +35,7 @@ public class ReflectionTests
         );
 
         Assert.NotNull(result.Reflection);
-        VertexElementDescription[] reflectedVerts = result.Reflection.VertexElements;
+        VertexElementDescription[] reflectedVerts = result.Reflection!.VertexElements;
         Assert.Equal(verts.Length, reflectedVerts.Length);
         for (int i = 0; i < verts.Length; i++)
         {

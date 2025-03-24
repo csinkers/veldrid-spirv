@@ -17,7 +17,7 @@ public static class SpirvCompilation
     public static void SetImportResolver()
     {
         var thisAssembly = Assembly.GetExecutingAssembly();
-        NativeLibrary.SetDllImportResolver(thisAssembly, (name, assembly, path) =>
+        NativeLibrary.SetDllImportResolver(thisAssembly, (name, _, _) =>
         {
             string baseDirectory = Path.GetDirectoryName(thisAssembly.Location)!;
             var (runtimeName, extension) = GetRuntimeName();
@@ -98,10 +98,10 @@ public static class SpirvCompilation
             {
                 result = VeldridSpirvNative.CrossCompile(&info);
                 if (!result->Succeeded)
-                    throw new SpirvCompilationException("Compilation failed: " + Util.GetString(result->Data(0)));
+                    throw new SpirvCompilationException("Compilation failed: " + SpirvUtil.GetString(result->Data(0)));
 
-                string vsCode = Util.GetString(result->Data(0));
-                string fsCode = Util.GetString(result->Data(1));
+                string vsCode = SpirvUtil.GetString(result->Data(0));
+                string fsCode = SpirvUtil.GetString(result->Data(1));
 
                 ReflectionInfo* reflInfo = &result->ReflectionInfo;
                 var vertexElements = new VertexElementDescription[reflInfo->VertexElements.Count];
@@ -135,10 +135,8 @@ public static class SpirvCompilation
     /// <param name="csBytes">The compute shader's SPIR-V bytecode or ASCII-encoded GLSL source code.</param>
     /// <param name="target">The target language.</param>
     /// <returns>A <see cref="ComputeCompilationResult"/> containing the compiled output.</returns>
-    public static ComputeCompilationResult CompileCompute(
-        byte[] csBytes,
-        CrossCompileTarget target
-    ) => CompileCompute(csBytes, target, CrossCompileOptions.Default);
+    public static ComputeCompilationResult CompileCompute(byte[] csBytes, CrossCompileTarget target)
+        => CompileCompute(csBytes, target, CrossCompileOptions.Default);
 
     /// <summary>
     /// Cross-compiles the given vertex-fragment pair into some target language.
@@ -172,9 +170,9 @@ public static class SpirvCompilation
             {
                 result = VeldridSpirvNative.CrossCompile(&info);
                 if (!result->Succeeded)
-                    throw new SpirvCompilationException("Compilation failed: " + Util.GetString(result->Data(0)));
+                    throw new SpirvCompilationException("Compilation failed: " + SpirvUtil.GetString(result->Data(0)));
 
-                string csCode = Util.GetString(result->Data(0));
+                string csCode = SpirvUtil.GetString(result->Data(0));
 
                 ReflectionInfo* reflInfo = &result->ReflectionInfo;
                 var layouts = new ResourceLayoutDescription[reflInfo->ResourceLayouts.Count];
@@ -213,102 +211,88 @@ public static class SpirvCompilation
         GlslCompileOptions options)
     {
         int sourceAsciiCount = Encoding.ASCII.GetByteCount(sourceText);
-        byte* sourceAsciiPtr = stackalloc byte[sourceAsciiCount];
-        fixed (char* sourceTextPtr = sourceText)
-        {
-            Encoding.ASCII.GetBytes(
-                sourceTextPtr,
-                sourceText.Length,
-                sourceAsciiPtr,
-                sourceAsciiCount
-            );
-        }
+        Span<byte> sourceAscii = stackalloc byte[sourceAsciiCount];
+        Encoding.ASCII.GetBytes(sourceText.AsSpan(), sourceAscii);
 
-        int macroCount = options.Macros.Length;
-        NativeMacroDefinition* macros = stackalloc NativeMacroDefinition[macroCount];
-        for (int i = 0; i < macroCount; i++)
-            macros[i] = new(options.Macros[i]);
-
-        return CompileGlslToSpirv(
-            (uint)sourceAsciiCount,
-            sourceAsciiPtr,
-            fileName,
-            kind,
-            options.Debug,
-            (uint)macroCount,
-            macros
-        );
+        return CompileGlslToSpirv(sourceAscii, fileName, kind, options);
     }
 
-    internal static unsafe SpirvCompilationResult CompileGlslToSpirv(
-        uint sourceLength,
-        byte* sourceTextPtr,
+    /// <summary>
+    /// Compiles the given GLSL source code into SPIR-V.
+    /// </summary>
+    /// <param name="sourceText">The shader source code.</param>
+    /// <param name="fileName">A descriptive name for the shader. May be null.</param>
+    /// <param name="kind">The <see cref="ShadercShaderKind"/> which the shader is used in.</param>
+    /// <param name="options">Parameters for the GLSL compiler.</param>
+    /// <returns>A <see cref="SpirvCompilationResult"/> containing the compiled SPIR-V bytecode.</returns>
+    public static unsafe SpirvCompilationResult CompileGlslToSpirv(
+        ReadOnlySpan<byte> sourceText,
         string? fileName,
         ShadercShaderKind kind,
-        bool debug,
-        uint macroCount,
-        NativeMacroDefinition* macros)
+        GlslCompileOptions options)
     {
-        GlslCompileInfo info;
-        info.Kind = kind;
-        info.SourceText = new(sourceLength, sourceTextPtr);
-        info.Debug = debug;
-        info.Macros = new(macroCount, macros);
+        var macros = options.Macros.AsSpan();
+        NativeMacroDefinition* nativeMacros = stackalloc NativeMacroDefinition[macros.Length];
+        for (int i = 0; i < macros.Length; i++)
+            nativeMacros[i] = new(macros[i]);
 
-        if (string.IsNullOrEmpty(fileName))
-            fileName = "<veldrid-spirv-input>";
-
-        int fileNameAsciiCount = Encoding.ASCII.GetByteCount(fileName);
-        byte* fileNameAsciiPtr = stackalloc byte[fileNameAsciiCount];
-        if (fileNameAsciiCount > 0)
+        fixed (byte* sourcePtr = &sourceText[0])
         {
-            fixed (char* fileNameTextPtr = fileName)
+            GlslCompileInfo info;
+            info.Kind = kind;
+            info.SourceText = new InteropArray<byte>((uint)sourceText.Length, sourcePtr);
+            info.Debug = options.Debug;
+            info.Macros = new((uint)macros.Length, nativeMacros);
+
+            if (string.IsNullOrEmpty(fileName))
+                fileName = "<veldrid-spirv-input>";
+
+            int fileNameAsciiCount = Encoding.ASCII.GetByteCount(fileName);
+            byte* fileNameAsciiPtr = stackalloc byte[fileNameAsciiCount];
+            if (fileNameAsciiCount > 0)
             {
-                Encoding.ASCII.GetBytes(
-                    fileNameTextPtr,
-                    fileName.Length,
-                    fileNameAsciiPtr,
-                    fileNameAsciiCount
-                );
+                fixed (char* fileNameTextPtr = fileName)
+                {
+                    Encoding.ASCII.GetBytes(
+                        fileNameTextPtr,
+                        fileName.Length,
+                        fileNameAsciiPtr,
+                        fileNameAsciiCount
+                    );
+                }
             }
-        }
 
-        info.FileName = new((uint)fileNameAsciiCount, fileNameAsciiPtr);
+            info.FileName = new((uint)fileNameAsciiCount, fileNameAsciiPtr);
 
-        CompilationResult* result = null;
-        try
-        {
-            result = VeldridSpirvNative.CompileGlslToSpirv(&info);
-            if (!result->Succeeded)
-                throw new SpirvCompilationException("Compilation failed: " + Util.GetString(result->Data(0)));
+            CompilationResult* result = null;
+            try
+            {
+                result = VeldridSpirvNative.CompileGlslToSpirv(&info);
+                if (!result->Succeeded)
+                    throw new SpirvCompilationException("Compilation failed: " + SpirvUtil.GetString(result->Data(0)));
 
-            byte[] spirvBytes = result->Data(0).ToArray();
-            return new(spirvBytes);
-        }
-        finally
-        {
-            if (result != null)
-                VeldridSpirvNative.FreeResult(result);
+                byte[] spirvBytes = result->Data(0).ToArray();
+                return new(spirvBytes);
+            }
+            finally
+            {
+                if (result != null)
+                    VeldridSpirvNative.FreeResult(result);
+            }
         }
     }
 
-    static unsafe byte[] CompileInner(byte[] shaderBytes, ShadercShaderKind kind, CrossCompileTarget target)
+    static byte[] CompileInner(byte[] shaderBytes, ShadercShaderKind kind, CrossCompileTarget target)
     {
-        if (Util.HasSpirvHeader(shaderBytes))
+        if (SpirvUtil.HasSpirvHeader(shaderBytes))
             return shaderBytes;
 
-        fixed (byte* sourceTextPtr = shaderBytes)
-        {
-            SpirvCompilationResult vsCompileResult = CompileGlslToSpirv(
-                (uint)shaderBytes.Length,
-                sourceTextPtr,
-                string.Empty,
-                kind,
-                target is CrossCompileTarget.GLSL or CrossCompileTarget.ESSL,
-                0,
-                null);
+        SpirvCompilationResult vsCompileResult = CompileGlslToSpirv(
+            shaderBytes,
+            string.Empty,
+            kind,
+            new GlslCompileOptions(target is CrossCompileTarget.GLSL or CrossCompileTarget.ESSL, []));
 
-            return vsCompileResult.SpirvBytes;
-        }
+        return vsCompileResult.SpirvBytes;
     }
 }

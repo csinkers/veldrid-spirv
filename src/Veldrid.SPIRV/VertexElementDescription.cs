@@ -20,7 +20,7 @@ internal struct NativeVertexElementDescription
     public uint Offset;
 
     public VertexElementDescription ToManaged() =>
-        new(Util.GetString(Name.AsSpan()),
+        new(SpirvUtil.GetString(Name.AsSpan()),
             Semantic,
             Format,
             Offset);

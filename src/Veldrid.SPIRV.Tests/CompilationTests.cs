@@ -79,8 +79,8 @@ public class CompilationTests
     )]
     public void VertexFragmentSucceeds(string vs, string fs, CrossCompileTarget target)
     {
-        byte[] vsBytes = TestUtil.LoadBytes(vs);
-        byte[] fsBytes = TestUtil.LoadBytes(fs);
+        byte[] vsBytes = TestSpirvUtil.LoadBytes(vs);
+        byte[] fsBytes = TestSpirvUtil.LoadBytes(fs);
         SpecializationConstant[] specializations =
         [
             new(100, 125u),
@@ -112,7 +112,7 @@ public class CompilationTests
     [InlineData("vertex-gen.comp", CrossCompileTarget.MSL)]
     public void ComputeSucceeds(string cs, CrossCompileTarget target)
     {
-        byte[] csBytes = TestUtil.LoadBytes(cs);
+        byte[] csBytes = TestSpirvUtil.LoadBytes(cs);
         ComputeCompilationResult result = SpirvCompilation.CompileCompute(csBytes, target);
         Assert.NotNull(result.ComputeShader);
     }
@@ -140,8 +140,8 @@ public class CompilationTests
     )]
     public void CompilationFails(string vs, string fs, CrossCompileTarget target)
     {
-        byte[] vsBytes = TestUtil.LoadBytes(vs);
-        byte[] fsBytes = TestUtil.LoadBytes(fs);
+        byte[] vsBytes = TestSpirvUtil.LoadBytes(vs);
+        byte[] fsBytes = TestSpirvUtil.LoadBytes(fs);
         Assert.Throws<SpirvCompilationException>(
             () =>
                 SpirvCompilation.CompileVertexFragment(
@@ -165,7 +165,7 @@ public class CompilationTests
     public void GlslToSpirv_Succeeds(string name, ShadercShaderKind stage)
     {
         SpirvCompilationResult result = SpirvCompilation.CompileGlslToSpirv(
-            TestUtil.LoadShaderText(name),
+            TestSpirvUtil.LoadShaderText(name),
             name,
             stage,
             new GlslCompileOptions(

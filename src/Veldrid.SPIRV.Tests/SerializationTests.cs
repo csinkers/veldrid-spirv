@@ -46,7 +46,7 @@ public class SerializationTests
         SpirvReflection? refl = SpirvReflection.LoadFromJson(ms);
 
         Assert.NotNull(refl);
-        Assert.Empty(refl.VertexElements);
+        Assert.Empty(refl!.VertexElements);
         Assert.Equal(2, refl.ResourceLayouts.Length);
         Assert.Equal(2, refl.ResourceLayouts[0].Elements.Length);
         Assert.Single(refl.ResourceLayouts[1].Elements);
