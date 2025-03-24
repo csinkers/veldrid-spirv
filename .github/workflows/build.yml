@@ -58,10 +58,12 @@ jobs:
             build_target: osx
             artifact_name: build/Release/osx/libveldrid-spirv.dylib
 
-          - os: macos-11
-            build_args: release ios
-            build_target: ios
-            artifact_name: build/Release/ios/libveldrid-spirv-combined.a
+          # macos-11 github action runner deprecated after Jun 2024.
+          # Disabling until someone w/ appropriate hardware volunteers to work on it.
+          #- os: macos-11
+          #  build_args: release ios
+          #  build_target: ios
+          #  artifact_name: build/Release/ios/libveldrid-spirv-combined.a
 
     name: ${{ matrix.build_target }} Native Build
 
@@ -173,11 +175,11 @@ jobs:
           name: osx
           path: build/Release/osx
 
-      - name: Download ios
-        uses: actions/download-artifact@v4
-        with:
-          name: ios
-          path: build/Release/ios
+      #- name: Download ios
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: ios
+      #    path: build/Release/ios
 
       - name: Install .NET
         uses: actions/setup-dotnet@v4
