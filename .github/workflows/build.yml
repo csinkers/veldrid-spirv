@@ -1,9 +1,10 @@
 name: CI
 on:
   workflow_dispatch:
-  create: # when tags are created
+  create:
   push:
     branches: [ master ]
+    tags: [ "*.*.*" ]
   pull_request:
     branches: [ master ]
 
@@ -190,6 +191,9 @@ jobs:
         run: dotnet restore src
 
       - name: Build NuGet Package
+        run: dotnet build src/Veldrid.SPIRV -c Release --no-restore
+
+      - name: Pack NuGet Package
         run: dotnet pack src/Veldrid.SPIRV -c Release --no-restore
 
       - name: Upload NuGet Package
