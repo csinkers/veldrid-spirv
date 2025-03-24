@@ -85,13 +85,17 @@ public static class SpirvCompilation
         info.InvertY = options.InvertVertexOutputY;
         info.NormalizeResourceNames = options.NormalizeResourceNames;
 
+        Span<NativeSpecializationConstant> specConstants = stackalloc NativeSpecializationConstant[options.Specializations.Length];
+        for (int i = 0; i < options.Specializations.Length; i++)
+            specConstants[i] = options.Specializations[i].ToNative();
+
         fixed (byte* vsBytesPtr = vsSpirvBytes)
         fixed (byte* fsBytesPtr = fsSpirvBytes)
-        fixed (SpecializationConstant* specConstants = options.Specializations)
+        fixed (NativeSpecializationConstant* pConstants = &specConstants[0])
         {
             info.VertexShader = new((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
             info.FragmentShader = new((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
-            info.Specializations = new((uint)options.Specializations.Length, specConstants);
+            info.Specializations = new((uint)specConstants.Length, pConstants);
 
             CompilationResult* result = null;
             try

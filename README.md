@@ -1,6 +1,6 @@
 # Veldrid.SPIRV
 
-[![NuGet](https://img.shields.io/nuget/v/Veldrid.SPIRV.svg)](https://www.nuget.org/packages/Veldrid.SPIRV)
+[![NuGet](https://img.shields.io/nuget/v/Sinkers.Veldrid.SPIRV.svg)](https://www.nuget.org/packages/Sinkers.Veldrid.SPIRV)
 
 Veldrid.SPIRV is an extension library for [Veldrid](https://github.com/mellinoe/veldrid) that provides support for loading SPIR-V bytecode for all Veldrid backends.
 
