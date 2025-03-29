@@ -92,7 +92,7 @@ public static class SpirvCompilation
 
         fixed (byte* vsBytesPtr = vsSpirvBytes)
         fixed (byte* fsBytesPtr = fsSpirvBytes)
-        fixed (NativeSpecializationConstant* pConstants = &specConstants[0])
+        fixed (NativeSpecializationConstant* pConstants = specConstants)
         {
             info.VertexShader = new((uint)vsSpirvBytes.Length / 4, vsBytesPtr);
             info.FragmentShader = new((uint)fsSpirvBytes.Length / 4, fsBytesPtr);
