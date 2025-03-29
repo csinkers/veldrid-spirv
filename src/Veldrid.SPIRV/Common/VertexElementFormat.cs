@@ -1,4 +1,5 @@
 // ReSharper disable once CheckNamespace
+// ReSharper disable InconsistentNaming
 namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards compatibility.
 
 /// <summary>
@@ -29,7 +30,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Two 8-bit unsigned normalized integers.
     /// </summary>
-    Byte2Norm,
+    Byte2_Norm,
 
     /// <summary>
     /// Two 8-bit unsigned integers.
@@ -39,7 +40,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Four 8-bit unsigned normalized integers.
     /// </summary>
-    Byte4Norm,
+    Byte4_Norm,
 
     /// <summary>
     /// Four 8-bit unsigned integers.
@@ -49,7 +50,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Two 8-bit signed normalized integers.
     /// </summary>
-    SByte2Norm,
+    SByte2_Norm,
 
     /// <summary>
     /// Two 8-bit signed integers.
@@ -59,7 +60,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Four 8-bit signed normalized integers.
     /// </summary>
-    SByte4Norm,
+    SByte4_Norm,
 
     /// <summary>
     /// Four 8-bit signed integers.
@@ -69,7 +70,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Two 16-bit unsigned normalized integers.
     /// </summary>
-    UShort2Norm,
+    UShort2_Norm,
 
     /// <summary>
     /// Two 16-bit unsigned integers.
@@ -79,7 +80,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Four 16-bit unsigned normalized integers.
     /// </summary>
-    UShort4Norm,
+    UShort4_Norm,
 
     /// <summary>
     /// Four 16-bit unsigned integers.
@@ -89,7 +90,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Two 16-bit signed normalized integers.
     /// </summary>
-    Short2Norm,
+    Short2_Norm,
 
     /// <summary>
     /// Two 16-bit signed integers.
@@ -99,7 +100,7 @@ public enum VertexElementFormat : byte
     /// <summary>
     /// Four 16-bit signed normalized integers.
     /// </summary>
-    Short4Norm,
+    Short4_Norm,
 
     /// <summary>
     /// Four 16-bit signed integers.
