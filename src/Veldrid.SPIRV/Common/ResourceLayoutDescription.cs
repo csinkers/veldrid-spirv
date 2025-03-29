@@ -4,4 +4,4 @@ namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards 
 /// <summary>
 /// Describes the layout of resources in a pipeline's resource set.
 /// </summary>
-public record struct ResourceLayoutDescription(ResourceLayoutElementDescription[] Elements);
+public record struct ResourceLayoutDescription(params ResourceLayoutElementDescription[] Elements);
