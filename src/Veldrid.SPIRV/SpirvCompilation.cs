@@ -206,6 +206,21 @@ public static class SpirvCompilation
     /// </summary>
     /// <param name="sourceText">The shader source code.</param>
     /// <param name="fileName">A descriptive name for the shader. May be null.</param>
+    /// <param name="stage">The <see cref="ShaderStages"/> which the shader is used in.</param>
+    /// <param name="options">Parameters for the GLSL compiler.</param>
+    /// <returns>A <see cref="SpirvCompilationResult"/> containing the compiled SPIR-V bytecode.</returns>
+    public static SpirvCompilationResult CompileGlslToSpirv(
+        string sourceText,
+        string fileName,
+        ShaderStages stage,
+        GlslCompileOptions options) =>
+        CompileGlslToSpirv(sourceText, fileName, GetShadercKind(stage), options);
+
+    /// <summary>
+    /// Compiles the given GLSL source code into SPIR-V.
+    /// </summary>
+    /// <param name="sourceText">The shader source code.</param>
+    /// <param name="fileName">A descriptive name for the shader. May be null.</param>
     /// <param name="kind">The <see cref="ShadercShaderKind"/> which the shader is used in.</param>
     /// <param name="options">Parameters for the GLSL compiler.</param>
     /// <returns>A <see cref="SpirvCompilationResult"/> containing the compiled SPIR-V bytecode.</returns>
@@ -221,6 +236,20 @@ public static class SpirvCompilation
 
         return CompileGlslToSpirv(sourceAscii, fileName, kind, options);
     }
+
+    /// <summary>
+    /// Compiles the given GLSL source code into SPIR-V.
+    /// </summary>
+    /// <param name="sourceText">The shader source code.</param>
+    /// <param name="fileName">A descriptive name for the shader. May be null.</param>
+    /// <param name="stage">The <see cref="ShaderStages"/> which the shader is used in.</param>
+    /// <param name="options">Parameters for the GLSL compiler.</param>
+    /// <returns>A <see cref="SpirvCompilationResult"/> containing the compiled SPIR-V bytecode.</returns>
+    public static SpirvCompilationResult CompileGlslToSpirv(
+        ReadOnlySpan<byte> sourceText,
+        string? fileName,
+        ShaderStages stage,
+        GlslCompileOptions options) => CompileGlslToSpirv(sourceText, fileName, GetShadercKind(stage), options);
 
     /// <summary>
     /// Compiles the given GLSL source code into SPIR-V.
@@ -300,4 +329,16 @@ public static class SpirvCompilation
 
         return vsCompileResult.SpirvBytes;
     }
+
+    static ShadercShaderKind GetShadercKind(ShaderStages stage) =>
+        stage switch
+        {
+            ShaderStages.Vertex => ShadercShaderKind.Vertex,
+            ShaderStages.Geometry => ShadercShaderKind.Geometry,
+            ShaderStages.TessellationControl => ShadercShaderKind.TessellationControl,
+            ShaderStages.TessellationEvaluation => ShadercShaderKind.TessellationEvaluation,
+            ShaderStages.Fragment => ShadercShaderKind.Fragment,
+            ShaderStages.Compute => ShadercShaderKind.Compute,
+            _ => throw new SpirvCompilationException($"Invalid shader stage: {stage}")
+        };
 }
