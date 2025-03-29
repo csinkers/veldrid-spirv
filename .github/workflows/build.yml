@@ -1,7 +1,6 @@
 name: CI
 on:
   workflow_dispatch:
-  create:
   push:
     tags: [ "*.*.*" ]
   pull_request:
