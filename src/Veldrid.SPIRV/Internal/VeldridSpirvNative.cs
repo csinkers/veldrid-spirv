@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Veldrid.SPIRV;
+namespace Veldrid.SPIRV.Internal;
 
 internal static unsafe class VeldridSpirvNative
 {

@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Veldrid.SPIRV;
+namespace Veldrid.SPIRV.Internal;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal unsafe struct NativeMacroDefinition

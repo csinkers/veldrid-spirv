@@ -1,6 +1,7 @@
 using System;
 
-namespace Veldrid.SPIRV;
+// ReSharper disable once CheckNamespace
+namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards compatibility.
 
 /// <summary>
 /// Miscellaneous options for an element in a ResourceLayout.

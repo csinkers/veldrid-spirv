@@ -1,4 +1,5 @@
-﻿namespace Veldrid.SPIRV;
+﻿// ReSharper disable once CheckNamespace
+namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards compatibility.
 
 /// <summary>
 /// The valid data types for shader constants.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Veldrid.SPIRV;
+namespace Veldrid.SPIRV.Internal;
 
 [StructLayout(LayoutKind.Sequential)]
 internal struct CompilationResult

@@ -1,6 +1,7 @@
 using System;
 
-namespace Veldrid.SPIRV;
+// ReSharper disable once CheckNamespace
+namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards compatibility.
 
 /// <summary>
 /// A bitmask representing a set of shader stages.
@@ -43,3 +44,4 @@ public enum ShaderStages : byte
     /// </summary>
     Compute = 1 << 5,
 }
+

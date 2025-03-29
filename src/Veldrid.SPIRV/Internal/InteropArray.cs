@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Veldrid.SPIRV;
+namespace Veldrid.SPIRV.Internal;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal unsafe struct InteropArray<T>(uint count, void* data) where T : unmanaged

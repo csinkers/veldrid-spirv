@@ -1,10 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using Veldrid.SPIRV.Internal;
 
-namespace Veldrid.SPIRV;
-
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-internal record struct NativeSpecializationConstant(uint Id, ulong Data);
+// ReSharper disable once CheckNamespace
+namespace Veldrid; // Put this into the Veldrid namespace to maintain backwards compatibility.
 
 /// <summary>
 ///

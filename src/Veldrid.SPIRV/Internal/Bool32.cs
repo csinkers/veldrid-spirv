@@ -1,4 +1,4 @@
-﻿namespace Veldrid.SPIRV;
+﻿namespace Veldrid.SPIRV.Internal;
 
 internal struct Bool32(bool value)
 {

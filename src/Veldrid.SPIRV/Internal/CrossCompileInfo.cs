@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Veldrid.SPIRV;
+namespace Veldrid.SPIRV.Internal;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 internal struct CrossCompileInfo
